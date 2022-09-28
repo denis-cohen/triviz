@@ -46,11 +46,11 @@ plot_continuous_estimates <- function(estimates,
   ## Inferred arguments
   if (inherits(estimates, "triviz_estimates")) {
     ## Overwrite function arguments
-    type <- ifelse(estimates$type == "analytical", "analytical", "numerical")
+    type <- estimates$type
     p_val_threshold <- (1 - estimates$alpha)
-    p_val_type <- ifelse(estimates$type == "analytical",
-                         "p-value",
-                         "Pr(k+1 > k)")
+    p_val_type <- ifelse(estimates$type == "bayesian",
+                         "Posterior \n probability",
+                         "p-value")
     one_tailed_test <- !estimates$twotailed
   } else {
     ## Integrity checks for non-triviz objects)

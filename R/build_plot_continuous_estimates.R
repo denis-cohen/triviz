@@ -277,7 +277,7 @@ build_plot_continuous_estimates <-
             ggplot2::scale_x_continuous(expand = c(0, 0)) +
             ggplot2::scale_y_continuous(expand = c(0, 0), limits = c(0, 1))
           if (!one_tailed_test) {
-            if (type == "numerical") {
+            if (type == "bayesian") {
               p_val_plot <- p_val_plot +
                 ggplot2::scale_fill_continuous(type = color_palette,
                                                "",
@@ -292,7 +292,7 @@ build_plot_continuous_estimates <-
                 )
             }
           } else {
-            if (type == "numerical") {
+            if (type == "bayesian") {
               p_val_plot <- p_val_plot +
                 ggplot2::scale_fill_gradientn(colors = c(rev(viridis::viridis(4)), viridis::viridis(4)),
                                               limits = c(0, 1))
@@ -311,7 +311,7 @@ build_plot_continuous_estimates <-
               p_val_plot <- p_val_plot +
                 ggplot2::geom_hline(
                   yintercept = ifelse(
-                    type == "numerical",
+                    type == "bayesian",
                     1 - p_val_threshold,
                     p_val_threshold
                   ),
@@ -372,7 +372,7 @@ build_plot_continuous_estimates <-
       ggplot2::geom_col(data = ev, ggplot2::aes(fill = p, x = 0, y = 0))
 
     if (!one_tailed_test) {
-      if (type == "numerical") {
+      if (type == "bayesian") {
         plot_ci <- plot_ci +
           ggplot2::scale_fill_continuous(
             type = color_palette,

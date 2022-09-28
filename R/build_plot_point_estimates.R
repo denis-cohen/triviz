@@ -142,11 +142,13 @@ build_plot_point_estimates <-
           x = i - 1,
           y = j,
           p_val = contrasts[j, , i]["p"],
-          hatched = ifelse(
-            !is.na(p_val_threshold),
-            format(contrasts[j, , i]["p"], scientific = FALSE) <= p_val_threshold,
-            FALSE
-          ),
+          hatched = ifelse(!is.na(p_val_threshold),
+                           ifelse(
+                             type == bayesian,
+                             (1 - format(contrasts[j, , i]["p"], scientific = FALSE)) > (1 - p_val_threshold),
+                             format(contrasts[j, , i]["p"], scientific = FALSE) <= p_val_threshold
+                           ),
+                           FALSE),
           tooltip = paste0(
             "<i>Click on tile to see distribution.</i>\n",
             "First Difference: ",
@@ -222,7 +224,7 @@ build_plot_point_estimates <-
                 panel.spacing = grid::unit(c(0, 0, 0, 0), "cm"),
                 legend.position = "none"
               )
-            if (type == "numerical") {
+            if (type == "bayesian") {
               p_val_plot <- p_val_plot +
                 ggplot2::scale_fill_continuous(type = color_palette,
                                                "",
@@ -241,7 +243,7 @@ build_plot_point_estimates <-
               p_val_plot <- p_val_plot +
                 ggplot2::geom_hline(
                   yintercept = ifelse(
-                    type == "numerical",
+                    type == "bayesian",
                     1 - p_val_threshold,
                     p_val_threshold
                   ),
