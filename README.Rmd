@@ -1,0 +1,18 @@
+---
+title: "triviz: Triangular Visualizations for the Significance of Pairwise Differences in Multigroup Comparisons"
+author: "Denis Cohen & Andreas Küpfer"
+date: "`r format(Sys.Date(), format='%B %d, %Y')`"
+output: rmarkdown::md_document
+
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, include = FALSE}
+# library(triviz)
+```
