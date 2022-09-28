@@ -144,7 +144,7 @@ build_plot_point_estimates <-
           p_val = contrasts[j, , i]["p"],
           hatched = ifelse(!is.na(p_val_threshold),
                            ifelse(
-                             type == bayesian,
+                             type == "bayesian",
                              (1 - format(contrasts[j, , i]["p"], scientific = FALSE)) > (1 - p_val_threshold),
                              format(contrasts[j, , i]["p"], scientific = FALSE) <= p_val_threshold
                            ),
