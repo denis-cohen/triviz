@@ -31,7 +31,7 @@ get_est_numerical <- function(model = NULL,
                               formula = model$formula,
                               variable,
                               twotailed = FALSE,
-                              alpha = .95,
+                              alpha = .05,
                               n_draws = 1000L,
                               seed = 20220315L,
                               link = "identity",
@@ -119,13 +119,13 @@ get_est_numerical <- function(model = NULL,
       ),
       "lower" = ifelse(
         twotailed,
-        stats::median(x) + stats::qnorm((1 - alpha) / 2) * stats::sd(x),
-        stats::quantile(x, .025)
+        stats::median(x) + stats::qnorm(alpha / 2) * stats::sd(x),
+        stats::quantile(x, alpha / 2)
       ),
       "upper" = ifelse(
         twotailed,
-        stats::median(x) + stats::qnorm(1 - (1 - alpha) / 2) * stats::sd(x),
-        stats::quantile(x, .975)
+        stats::median(x) + stats::qnorm(1 - alpha / 2) * stats::sd(x),
+        stats::quantile(x, (1 - alpha / 2))
       )
     )
   }) %>%

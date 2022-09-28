@@ -17,7 +17,7 @@ get_est_analytical <- function(model,
                                data = model$model,
                                formula = model$formula,
                                variable,
-                               alpha = 0.95,
+                               alpha = 0.05,
                                twotailed = TRUE) {
   ## Data list
   data_list <- list(levels(dat[[variable]]))
@@ -28,7 +28,7 @@ get_est_analytical <- function(model,
     mod,
     at = data_list,
     vce = "delta",
-    level = alpha - as.numeric(!twotailed) * (1 - alpha)
+    level = 1 - alpha * (1 + as.numeric(!twotailed))
   ) %>%
     summary()
 
@@ -58,7 +58,7 @@ get_est_analytical <- function(model,
       ),
       variable = variable,
       vce = "delta",
-      level = alpha - as.numeric(!twotailed) * (1 - alpha)
+      level = 1 - alpha * (1 + as.numeric(!twotailed))
     ) %>%
       base::summary() %>%
       dplyr::slice(order(AME)) %>%

@@ -21,7 +21,8 @@ get_est_analytical_continuous <- function(model,
                                           group_variable,
                                           continuous_variable,
                                           seq_length = 21L,
-                                          alpha = 0.95) {
+                                          alpha = 0.05,
+                                          twotailed = TRUE) {
   ## Data list
   data_list <- list(levels(dat[[group_variable]]),
                     seq(min(dat[[continuous_variable]], na.rm = TRUE),
@@ -34,7 +35,7 @@ get_est_analytical_continuous <- function(model,
   ev <- prediction::prediction(mod,
                                at = data_list,
                                vce = "delta",
-                               level = alpha) %>%
+                               level = 1 - alpha * (1 + as.numeric(!twotailed))) %>%
     summary() %>%
     dplyr::rename(
       Group = paste0("at(", group_variable, ")"),
@@ -63,7 +64,7 @@ get_est_analytical_continuous <- function(model,
       variable = group_variable,
       at = data_list[continuous_variable],
       vce = "delta",
-      level = alpha
+      level = 1 - alpha * (1 + as.numeric(!twotailed))
     ) %>%
       base::summary() %>%
       dplyr::slice(order(AME)) %>%
