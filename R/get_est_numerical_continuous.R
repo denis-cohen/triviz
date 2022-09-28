@@ -141,7 +141,7 @@ get_est_numerical_continuous <- function(model = NULL,
                        2 * pnorm(abs(
                          median(x) / sd(x)
                        ), lower.tail = FALSE),
-                       mean(x > 0)),
+                       mean(x <= 0)),
           "lower" = ifelse(
             twotailed,
             median(x) + qnorm(1 - alpha / 2) * sd(x),
@@ -197,7 +197,7 @@ get_est_numerical_continuous <- function(model = NULL,
                     "p" = ifelse(
                       twotailed,
                       2 * pnorm(abs(median(x) / sd(x)), lower.tail = FALSE),
-                      mean(x > 0)
+                      mean(x <= 0)
                     ),
                     "lower" = ifelse(
                       twotailed,
