@@ -35,8 +35,9 @@ plot_point_estimates <- function(estimates,
   ## Inferred arguments
   if (inherits(estimates, "triviz_estimates")) {
     ## Overwrite function arguments
+    type <- estimates$type
     p_val_threshold <- (1 - estimates$alpha)
-    p_val_type <- ifelse(estimates$type == "analytical",
+    p_val_type <- ifelse(type == "analytical",
                          "p-value",
                          "Pr(k+1 > k)")
     one_tailed_test <- !estimates$twotailed
