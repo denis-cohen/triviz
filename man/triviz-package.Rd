@@ -37,7 +37,7 @@ Useful links:
 
 Authors:
 \itemize{
-  \item Andreas Küpfer \email{akuepfer@mail.uni-mannheim.de}
+  \item Andreas K<U+00FC>pfer \email{akuepfer@mail.uni-mannheim.de}
 }
 
 }
