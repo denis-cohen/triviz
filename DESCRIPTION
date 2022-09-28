@@ -1,0 +1,44 @@
+Package: triviz
+Type: Package
+Title: Triangular Visualizations for the Significance of Pairwise 
+    Differences in Multigroup Comparisons
+Version: 0.1.0
+Authors@R: c(
+    person("Denis", "Cohen", email = "denis.cohen@mzes.uni-mannheim.de", role = c("cre","aut")),
+    person("Andreas", "Küpfer", email = "akuepfer@mail.uni-mannheim.de", role = "aut"))
+Description: The \code{triviz} package offers functions for
+    plotting group-specific estimates along with information on the
+    uncertainty about all of their pairwise differences. Next to
+    static \code{ggplot2}-based plotting functions, it also offers
+    tools for the in-depth exploration of these pairwise differences
+    via interactive \code{shiny} Apps.
+License: GPL-3
+URL: https://github.com/denis-cohen/triviz
+BugReports: https://github.com/denis-cohen/triviz/issues
+Depends:
+    R (>= 4.1.0)
+Imports:
+    dplyr (>= 1.0.0),
+    shiny (>= 1.7.1),
+    ggiraph (>= 0.7.1),
+    ggplotify (>= 0.1.0),
+    magrittr (>= 2.0.1),
+    rlang (>= 0.4.12),
+    stats (>= 4.0.4),
+    MASS (>= 7.3),
+    margins (>= 0.3.26),
+    ggpattern (>= 0.4.2),
+    prediction (>= 0.3.14),
+    labeling (>= 0.4.2)
+Remotes:
+    github::coolbutuseless/ggpattern
+Suggests:
+    knitr,
+    rmarkdown,
+    testthat
+VignetteBuilder:
+    knitr
+Encoding: UTF-8
+Language: en-US
+LazyData: true
+RoxygenNote: 7.2.1
