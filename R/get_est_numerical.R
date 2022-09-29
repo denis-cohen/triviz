@@ -157,17 +157,17 @@ get_est_numerical <- function(model = NULL,
       "p" = ifelse(
         twotailed,
         2 * stats::pnorm(abs(stats::median(x) / stats::sd(x)), lower.tail = FALSE),
-        ifelse(stats::median(x) < 0, mean(x <= 0), mean(x >= 0))
+        mean(x >= 0)
       ),
       "lower" = ifelse(
         twotailed,
-        stats::median(x) + stats::qnorm((1 - alpha) / 2) * stats::sd(x),
-        stats::quantile(x, .025)
+        stats::median(x) + stats::qnorm(alpha / 2) * stats::sd(x),
+        stats::quantile(x, alpha / 2)
       ),
       "upper" = ifelse(
         twotailed,
-        stats::median(x) + stats::qnorm(1 - (1 - alpha) / 2) * stats::sd(x),
-        stats::quantile(x, .975)
+        stats::median(x) + stats::qnorm((1 - alpha) / 2) * stats::sd(x),
+        stats::quantile(x, 1 - alpha / 2)
       )
     )
   }) %>%

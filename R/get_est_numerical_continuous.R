@@ -105,14 +105,15 @@ get_est_numerical_continuous <- function(model = NULL,
         data = dat %>%
           dplyr::mutate(
             !!sym(group_variable) :=
-              factor(levels[l], levels = levels),!!sym(continuous_variable) :=
+              factor(levels[l], levels = levels),
+            !!sym(continuous_variable) :=
               x_seq[x]
           ),
         xlev = levels_list
       )
-      ev_draws[l, x,] <- triviz:::predict_from_draws(draws = draws,
-                                                     x = t(x_tmp),
-                                                     link_function = link) %>%
+      ev_draws[l, x, ] <- triviz:::predict_from_draws(draws = draws,
+                                                      x = t(x_tmp),
+                                                      link_function = link) %>%
         apply(1, mean)
     }
   }
@@ -126,14 +127,14 @@ get_est_numerical_continuous <- function(model = NULL,
   ordered_labels <- rownames(ev_medians)[ordered_levels]
 
   ## Ordered expected values (draws)
-  ev_draws <- ev_draws[ordered_levels, ,]
+  ev_draws <- ev_draws[ordered_levels, , ]
 
   ## Ordered expected values (summaries)
   ev <- dplyr::tibble()
   for (j in seq_along(x_seq)) {
     ev <- dplyr::bind_rows(
       ev,
-      apply(ev_draws[, j,], 1, function (x) {
+      apply(ev_draws[, j, ], 1, function (x) {
         c(
           "EV" = median(x),
           "SE" = sd(x),
@@ -144,13 +145,13 @@ get_est_numerical_continuous <- function(model = NULL,
                        mean(x <= 0)),
           "lower" = ifelse(
             twotailed,
-            median(x) + qnorm(1 - alpha / 2) * sd(x),
-            quantile(x, .025)
+            median(x) + qnorm(alpha / 2) * sd(x),
+            quantile(x, alpha / 2)
           ),
           "upper" = ifelse(
             twotailed,
             median(x) - qnorm(1 - alpha / 2) * sd(x),
-            quantile(x, .975)
+            quantile(x, 1 - alpha / 2)
           )
         )
       }) %>%
@@ -176,7 +177,7 @@ get_est_numerical_continuous <- function(model = NULL,
     for (j in not_i) {
       j_num <- j_num + 1L
       contrasts_draws[j_num, , , i_num] <-
-        ev_draws[j, ,] - ev_draws[i, ,]
+        ev_draws[j, , ] - ev_draws[i, , ]
     }
   }
 
@@ -196,18 +197,20 @@ get_est_numerical_continuous <- function(model = NULL,
                     "SE" = sd(x),
                     "p" = ifelse(
                       twotailed,
-                      2 * pnorm(abs(median(x) / sd(x)), lower.tail = FALSE),
+                      2 * stats::pnorm(abs(
+                        stats::median(x) / stats::sd(x)
+                      ), lower.tail = FALSE),
                       mean(x <= 0)
                     ),
                     "lower" = ifelse(
                       twotailed,
-                      median(x) + qnorm(1 - alpha / 2) * sd(x),
-                      quantile(x, .025)
+                      stats::median(x) + stats::qnorm(alpha / 2) * stats::sd(x),
+                      stats::quantile(x, .025)
                     ),
                     "upper" = ifelse(
                       twotailed,
-                      median(x) - qnorm(1 - alpha / 2) * sd(x),
-                      quantile(x, .975)
+                      stats::median(x) - stats::qnorm(1 - alpha / 2) * stats::sd(x),
+                      stats::quantile(x, .975)
                     )
                   )
                 }) %>%
@@ -230,9 +233,8 @@ get_est_numerical_continuous <- function(model = NULL,
                   SE,
                   p ,
                   lower,
-                  upper,
-                  !!as.name(continuous_variable)) %>%
-    dplyr::arrange(Group1,!!as.name(continuous_variable), Group2)
+                  upper,!!as.name(continuous_variable)) %>%
+    dplyr::arrange(Group1, !!as.name(continuous_variable), Group2)
 
   ## Return value
   output <- list(
