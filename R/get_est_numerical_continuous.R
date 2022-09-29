@@ -200,7 +200,7 @@ get_est_numerical_continuous <- function(model = NULL,
                       2 * stats::pnorm(abs(
                         stats::median(x) / stats::sd(x)
                       ), lower.tail = FALSE),
-                      mean(x <= 0)
+                      mean(x >= 0)
                     ),
                     "lower" = ifelse(
                       twotailed,
