@@ -150,7 +150,9 @@ build_plot_point_estimates <-
                            ),
                            FALSE),
           tooltip = paste0(
-            "<i>Click on tile to see distribution.</i>\n",
+            "<i>Click on tile to see ",
+            ifelse(type == "bayesian", "posterior", "sampling"),
+            " distribution.</i>\n",
             "First Difference: ",
             ev[j + 1, ]$Group,
             " - ",
@@ -313,7 +315,7 @@ build_plot_point_estimates <-
                         width = 0,
                         ggplot2::aes(fill = p, x = 0, y = p))
 
-    if (type == "numerical") {
+    if (type %in% c("analytical", "simulation", "bootstrap")) {
       plot_ci <- plot_ci +
         ggplot2::scale_fill_continuous(
           type = color_palette,

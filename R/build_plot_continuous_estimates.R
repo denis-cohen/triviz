@@ -277,7 +277,7 @@ build_plot_continuous_estimates <-
             ggplot2::scale_x_continuous(expand = c(0, 0)) +
             ggplot2::scale_y_continuous(expand = c(0, 0), limits = c(0, 1))
           if (!one_tailed_test) {
-            if (type == "bayesian") {
+            if (type %in% c("analytical", "simulation", "bootstrap")) {
               p_val_plot <- p_val_plot +
                 ggplot2::scale_fill_continuous(type = color_palette,
                                                "",
