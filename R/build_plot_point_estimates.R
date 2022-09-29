@@ -145,8 +145,8 @@ build_plot_point_estimates <-
           hatched = ifelse(!is.na(p_val_threshold),
                            ifelse(
                              type == "bayesian",
-                             (1 - format(contrasts[j, , i]["p"], scientific = FALSE)) > (1 - p_val_threshold),
-                             format(contrasts[j, , i]["p"], scientific = FALSE) <= p_val_threshold
+                             (1 - contrasts[j, , i]["p"]) > (1 - p_val_threshold),
+                             contrasts[j, , i]["p"] <= p_val_threshold
                            ),
                            FALSE),
           tooltip = paste0(
@@ -161,7 +161,7 @@ build_plot_point_estimates <-
               nsmall = 2,
               scientific = F
             ),
-            "\n 95%-Interval: ",
+            paste0("\n ", round(100 * (1 - alpha), 1), "%-Interval: "),
             format(
               round(contrasts[j, , i]["lower"], 2),
               nsmall = 2,
@@ -173,7 +173,7 @@ build_plot_point_estimates <-
               nsmall = 2,
               scientific = F
             ),
-            "\n p-value: ",
+            paste0("\n ", p_val_type, ": "),
             format(
               round(contrasts[j, , i]["p"], 2),
               nsmall = 2,
