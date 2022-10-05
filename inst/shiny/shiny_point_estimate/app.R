@@ -16,9 +16,6 @@ plotModal <- function(session, id, groups) {
     i <- as.integer(gsub(".*_(.*?)_.*", "\\1", id))
     j <- as.integer(gsub("_(.*)", "", id)) + 1
 
-    h_vals <- seq(-.4, 1.2, .3)
-    v_vals <- seq(0, 1.0, .25)
-
     if (!is.na(contrasts_draws)) {
       xrange <- contrasts_draws[i, , j] %>%
         range(na.rm = TRUE)
@@ -32,7 +29,6 @@ plotModal <- function(session, id, groups) {
       xvals <- seq(min(xrange), max(xrange), length.out = 501L)
       yvals <-
         dnorm(xvals, contrasts[i, 1, j], contrasts[i, 2, j])
-      yvals <- yvals / max(yvals)
       lower <- which.min(abs(xvals - contrasts[i, 4, j]))
       upper <- which.min(abs(xvals - contrasts[i, 5, j]))
     }

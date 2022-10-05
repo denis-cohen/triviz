@@ -145,8 +145,8 @@ build_plot_point_estimates <-
           hatched = ifelse(!is.na(p_val_threshold),
                            ifelse(
                              type == "bayesian",
-                             (1 - contrasts[j, , i]["p"]) > p_val_threshold,
-                             contrasts[j, , i]["p"] <= (1 - p_val_threshold)
+                             (1 - contrasts[j, , i]["p"]) > 1 - p_val_threshold,
+                             contrasts[j, , i]["p"] < p_val_threshold
                            ),
                            FALSE),
           tooltip = paste0(
@@ -320,8 +320,8 @@ build_plot_point_estimates <-
         ggplot2::scale_fill_continuous(
           type = color_palette,
           "",
-          limits = c(0, 1),
-          breaks = seq(0, 1, by = 0.25)
+          limits = c(1, 0),
+          breaks = seq(1, 0, by = 0.25)
         )
     } else {
       plot_ci <- plot_ci +
@@ -329,7 +329,7 @@ build_plot_point_estimates <-
           type = color_palette,
           trans = 'reverse',
           "",
-          limits = c(1, 0),
+          limits = c(0, 1),
           breaks = seq(0, 1, by = 0.25)
         )
     }

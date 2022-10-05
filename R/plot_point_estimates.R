@@ -43,7 +43,7 @@ plot_point_estimates <- function(estimates,
   if (inherits(estimates, "triviz_estimates")) {
     ## Overwrite function arguments
     type <- estimates$type
-    p_val_threshold <- (1 - estimates$alpha)
+    p_val_threshold <- estimates$alpha
     p_val_type <- ifelse(estimates$type == "bayesian",
                          "Posterior \n probability",
                          "p-value")

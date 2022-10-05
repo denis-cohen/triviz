@@ -11,7 +11,7 @@ get_est_numerical(
   formula = model$formula,
   variable,
   twotailed = FALSE,
-  alpha = 0.95,
+  alpha = 0.05,
   n_draws = 1000L,
   seed = 20220315L,
   link = "identity",

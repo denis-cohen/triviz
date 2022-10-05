@@ -11,7 +11,8 @@ get_est_analytical_continuous(
   group_variable,
   continuous_variable,
   seq_length = 21L,
-  alpha = 0.95
+  alpha = 0.05,
+  twotailed = TRUE
 )
 }
 \arguments{

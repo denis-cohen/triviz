@@ -6,7 +6,7 @@
 \usage{
 plot_continuous_estimates(
   estimates,
-  type = c("analytical", "numerical"),
+  type = c("analytical", "simulation", "bootstrap", "bayesian"),
   variable,
   variable_label = NA,
   round_dec = 2,
@@ -22,8 +22,9 @@ plot_continuous_estimates(
 of \code{get_est} commands or a user-supplied object of equivalent structure (for
 details, please see the vignette)}
 
-\item{type}{Specified whether uncertainty estimates are analytically or numerically
-derived (evaluated only when \code{estimates} is a user-supplied object)}
+\item{type}{Specifies how uncertainty estimates are derived (evaluated only when
+\code{estimates} is a user-supplied object). Input must be one of
+\code{"analytical"}, \code{"simulation"}, \code{"bootstrap"}, or \code{"bayesian"}.}
 
 \item{variable}{Column name of the continuous predictor along which estimates will
 be plotted}

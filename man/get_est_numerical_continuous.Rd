@@ -12,7 +12,7 @@ get_est_numerical_continuous(
   group_variable,
   continuous_variable,
   seq_length = 21L,
-  alpha = 0.95,
+  alpha = 0.05,
   twotailed = FALSE,
   n_draws = 1000L,
   seed = 20220315L,

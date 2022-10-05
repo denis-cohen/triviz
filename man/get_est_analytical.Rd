@@ -9,7 +9,7 @@ get_est_analytical(
   data = model$model,
   formula = model$formula,
   variable,
-  alpha = 0.95,
+  alpha = 0.05,
   twotailed = TRUE
 )
 }
