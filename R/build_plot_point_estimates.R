@@ -163,7 +163,7 @@ build_plot_point_estimates <-
               nsmall = 2,
               scientific = F
             ),
-            paste0("\n ", round(100 * (1 - alpha), 1), "%-Interval: "),
+            paste0("\n ", round(100 * (1 - p_val_threshold), 1), "%-Interval: "),
             format(
               round(contrasts[j, , i]["lower"], 2),
               nsmall = 2,
