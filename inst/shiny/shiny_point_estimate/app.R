@@ -34,16 +34,7 @@ plotModal <- function(session, id, groups) {
     }
 
     distribution <- ggplotify::as.ggplot(function() {
-      if (!is.na(contrasts_draws)) {
-        hist(
-          yvals,
-          main = paste0(ev[i + 1, ]$Group, " - ", ev[j, ]$Group),
-          xlab = "First Difference",
-          ylab = "Draws",
-          xlim = c(min(yvals),
-                   max(yvals))
-        )
-      } else {
+      if (type == "analytical") {
         plot(
           1,
           1,
@@ -80,6 +71,15 @@ plotModal <- function(session, id, groups) {
         points(xvals[yvals == 1],
                0.5,
                pch = 19)
+      } else {
+        hist(
+          yvals,
+          main = paste0(ev[i + 1, ]$Group, " - ", ev[j, ]$Group),
+          xlab = "First Difference",
+          ylab = "Draws",
+          xlim = c(min(yvals),
+                   max(yvals))
+        )
       }
       abline(v = 0, col = "red")
     })
