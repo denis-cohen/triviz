@@ -321,7 +321,7 @@ build_plot_point_estimates <-
           type = color_palette,
           "",
           limits = c(1, 0),
-          breaks = seq(1, 0, by = 0.25)
+          breaks = seq(1, 0, by = -0.25)
         )
     } else {
       plot_ci <- plot_ci +
