@@ -16,13 +16,8 @@ plotModal <- function(session, id, groups) {
     i <- as.integer(gsub(".*_(.*?)_.*", "\\1", id))
     j <- as.integer(gsub("_(.*)", "", id)) + 1
 
-    if (!is.na(contrasts_draws)) {
-      xrange <- contrasts_draws[i, , j] %>%
-        range(na.rm = TRUE)
-      yvals <- contrasts_draws[i, , j]
-      yvals <- yvals / max(yvals)
-    } else {
-      xrange <- contrasts[, c("lower", "upper"), ] %>%
+    if (type == "analytical") {
+      xrange <- contrasts[, 1:2, ] %>%
         apply(1:2, function (row)
           row[1] + c(-3, 3) * row[2]) %>%
         range(na.rm = TRUE)
@@ -31,6 +26,11 @@ plotModal <- function(session, id, groups) {
         dnorm(xvals, contrasts[i, 1, j], contrasts[i, 2, j])
       lower <- which.min(abs(xvals - contrasts[i, 4, j]))
       upper <- which.min(abs(xvals - contrasts[i, 5, j]))
+    } else {
+      xrange <- contrasts_draws[i, , j] %>%
+        range(na.rm = TRUE)
+      yvals <- contrasts_draws[i, , j]
+      yvals <- yvals / max(yvals)
     }
 
     distribution <- ggplotify::as.ggplot(function() {
