@@ -163,19 +163,19 @@ build_plot_point_estimates <-
               nsmall = 2,
               scientific = F
             ),
-            paste0("\n ", round(100 * (1 - p_val_threshold), 1), "%-Interval: "),
+            paste0("\n ", round(100 * (1 - p_val_threshold), 1), "%-Interval: ["),
             format(
               round(contrasts[j, , i]["lower"], 2),
               nsmall = 2,
               scientific = F
             ),
-            " - ",
+            ";",
             format(
               round(contrasts[j, , i]["upper"], 2),
               nsmall = 2,
               scientific = F
             ),
-            paste0("\n ", p_val_type, ": "),
+            paste0("] \n ", p_val_type, ": "),
             format(
               round(contrasts[j, , i]["p"], 2),
               nsmall = 2,
@@ -319,15 +319,15 @@ build_plot_point_estimates <-
       plot_ci <- plot_ci +
         ggplot2::scale_fill_continuous(
           type = color_palette,
+          trans = 'reverse',
           "",
-          limits = c(1, 0),
+          limits = c(0, 1),
           breaks = seq(0, 1, by = 0.25)
         )
     } else {
       plot_ci <- plot_ci +
         ggplot2::scale_fill_continuous(
           type = color_palette,
-          trans = 'reverse',
           "",
           limits = c(0, 1),
           breaks = seq(0, 1, by = 0.25)

@@ -34,7 +34,7 @@ plotModal <- function(session, id, groups) {
     }
 
     distribution <- ggplotify::as.ggplot(function() {
-      if (!is.na(contrasts_draws[[1]])) {
+      if (!is.na(contrasts_draws)) {
         hist(
           yvals,
           main = paste0(ev[i + 1, ]$Group, " - ", ev[j, ]$Group),
