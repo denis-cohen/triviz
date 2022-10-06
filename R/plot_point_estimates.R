@@ -12,7 +12,7 @@
 #' @param round_dec Number of decimal points for rounding of the x-axis
 #' @param color_palette Character specifying the name of the color palette to be used.
 #' Defaults to \code{"viridis"}.
-#' @param column_vis Show color palette in a legend
+#' @param column_vis Show color palette in a legend. Defaults to TRUE.
 #' @param one_tailed_test = (evaluated only when \code{estimates} is a user-supplied object)
 #' @param p_val_threshold = (evaluated only when \code{estimates} is a user-supplied object)
 #' @param p_val_type (evaluated only when \code{estimates} is a user-supplied object)
@@ -28,7 +28,7 @@ plot_point_estimates <- function(estimates,
                                           "bayesian"),
                                  round_dec = 2,
                                  color_palette = "viridis",
-                                 column_vis = FALSE,
+                                 column_vis = TRUE,
                                  one_tailed_test = FALSE,
                                  p_val_threshold = 0.05,
                                  p_val_type = "p-value",
