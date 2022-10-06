@@ -113,7 +113,7 @@ server <- function(input, output, session) {
       color_palette,
       p_val_threshold,
       p_val_type,
-      column_vis
+      p_bars
     )
 
   # Preparing for output using ggiraph
@@ -178,7 +178,7 @@ round_dec <- getShinyOption("round_dec")
 color_palette <- getShinyOption("color_palette")
 p_val_threshold <- getShinyOption("p_val_threshold")
 p_val_type <- getShinyOption("p_val_type")
-column_vis <- getShinyOption("column_vis")
+p_bars <- getShinyOption("p_bars")
 
 # Run the shiny application
 shiny::shinyApp(ui = ui, server = server)

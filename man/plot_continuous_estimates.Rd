@@ -45,8 +45,6 @@ Defaults to \code{"viridis"}.}
 
 \item{interactive}{A logical flag indicating whether the plotting function should
 produce an interactive ShinyApp or a static ggplot2 object (the default)}
-
-\item{column_vis}{Show color palette in a legend}
 }
 \description{
 Plots the lower triangular visualization

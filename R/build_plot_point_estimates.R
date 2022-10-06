@@ -15,7 +15,7 @@ build_plot_point_estimates <-
            color_palette,
            p_val_threshold,
            p_val_type,
-           column_vis) {
+           p_bars) {
     # Initialize ggplot object with scales
     n_ticks <- 5
     breaks <- labeling::extended(
@@ -208,7 +208,7 @@ build_plot_point_estimates <-
             )
         }
         if (i <= j) {
-          if (column_vis) {
+          if (p_bars) {
             p_val_plot <-
               ggplot2::ggplot(data, ggplot2::aes_string(x = 0, "p_val")) +
               ggplot2::geom_col(width = 0.25, ggplot2::aes(fill = p_val)) +

@@ -9,7 +9,7 @@ plot_point_estimates(
   type = c("analytical", "simulation", "bootstrap", "bayesian"),
   round_dec = 2,
   color_palette = "viridis",
-  column_vis = FALSE,
+  p_bars = FALSE,
   one_tailed_test = FALSE,
   p_val_threshold = 0.05,
   p_val_type = "p-value",
@@ -30,7 +30,7 @@ details, please see the vignette)}
 \item{color_palette}{Character specifying the name of the color palette to be used.
 Defaults to \code{"viridis"}.}
 
-\item{column_vis}{Show color palette in a legend}
+\item{p_bars}{Show p-values as bars, not as shadings.}
 
 \item{one_tailed_test}{= (evaluated only when \code{estimates} is a user-supplied object)}
 
