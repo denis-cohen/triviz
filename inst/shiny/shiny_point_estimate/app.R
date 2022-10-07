@@ -17,32 +17,30 @@ plotModal <- function(session, id, groups) {
     j <- as.integer(gsub("_(.*)", "", id)) + 1
 
     if (type == "analytical") {
-      xrange <- contrasts[, 1:2, ] %>%
-        apply(1:2, function (row)
-          row[1] + c(-3, 3) * row[2]) %>%
-        range(na.rm = TRUE)
+      xrange <- contrasts[i, 1, j] + c(-5, 5) * contrasts[i, 2, j]
       xvals <- seq(min(xrange), max(xrange), length.out = 501L)
       yvals <-
         dnorm(xvals, contrasts[i, 1, j], contrasts[i, 2, j])
-      lower <- which.min(abs(xvals - contrasts[i, 4, j]))
-      upper <- which.min(abs(xvals - contrasts[i, 5, j]))
+      y_mid <- 0.5 * max(yvals)
     } else {
       xrange <- contrasts_draws[i, , j] %>%
         range(na.rm = TRUE)
       yvals <- contrasts_draws[i, , j]
-      yvals <- yvals / max(yvals)
     }
+    point <- contrasts[i, 1, j]
+    lower <- contrasts[i, 4, j]
+    upper <- contrasts[i, 5, j]
 
     distribution <- ggplotify::as.ggplot(function() {
       if (type == "analytical") {
         plot(
           1,
           1,
-          main = paste0(ev[i + 1, ]$Group, " - ", ev[j, ]$Group),
+          main = paste0(ev[i + 1,]$Group, " - ", ev[j,]$Group),
           xlab = "First Difference",
           ylab = "Density",
           xlim = xrange,
-          ylim = c(0, 1.25),
+          ylim = c(0, max(yvals)),
           type = "n"
         )
 
@@ -54,33 +52,34 @@ plotModal <- function(session, id, groups) {
           border = "gray50",
           col = adjustcolor("gray50", alpha.f = .5)
         )
-        segments(xvals[yvals == 1],
-                 0,
-                 xvals[yvals == 1],
-                 yvals[yvals == 1],
-                 col = "gray50")
-        arrows(
-          xvals_95[lower],
-          0.5,
-          xvals_95[upper],
-          0.5,
-          angle = 90,
-          code = 3,
-          length = 0.05
-        )
-        points(xvals[yvals == 1],
-               0.5,
-               pch = 19)
       } else {
-        hist(
-          yvals,
+        histogram <- hist(yvals,
+                          plot = FALSE)
+        histogram$density <-
+          histogram$density / sum(histogram$density)
+        y_mid <- 0.5 * max(histogram$density)
+        plot(
+          histogram,
+          freq = FALSE,
           main = paste0(ev[i + 1, ]$Group, " - ", ev[j, ]$Group),
           xlab = "First Difference",
-          ylab = "Draws",
+          ylab = "Proportion of draws",
           xlim = c(min(yvals),
                    max(yvals))
         )
       }
+      arrows(
+        lower,
+        y_mid,
+        upper,
+        y_mid,
+        angle = 90,
+        code = 3,
+        length = 0.05
+      )
+      points(point,
+             y_mid,
+             pch = 19)
       abline(v = 0, col = "red")
     })
 
