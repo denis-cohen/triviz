@@ -209,7 +209,7 @@ build_plot_continuous_estimates <-
     contrasts <- data.frame(contrasts) %>%
       mutate(Group1 = as.character(Group1)) %>%
       mutate(Group2 = as.character(Group2)) %>%
-      arrange(Group1, Group2)
+      arrange(Group2, Group1)
 
     ratio_y_range <- max_y_range * ratio
     unique_groups <- unique(ev$Group)
@@ -260,9 +260,9 @@ build_plot_continuous_estimates <-
             tooltip = paste0(
               "<i>Click on tile to see first differences.</i>\n",
               "First Difference: ",
-              unique_groups[group2],
+              unique_groups[group1],
               " - ",
-              unique_groups[group1]
+              unique_groups[group2]
             )
           )
           filtered_group_pval <- filtered_group %>%
