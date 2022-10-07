@@ -279,13 +279,13 @@ build_plot_continuous_estimates <-
             if (type %in% c("analytical", "simulation", "bootstrap")) {
               p_val_plot <- p_val_plot +
                 ggplot2::scale_fill_continuous(type = color_palette,
+                                               trans = "reverse",
                                                "",
-                                               limits = c(0, 1))
+                                               limits = c(1, 0))
             } else {
               p_val_plot <- p_val_plot +
                 ggplot2::scale_fill_continuous(
                   type = color_palette,
-                  trans = "reverse",
                   "",
                   limits = c(0, 1)
                 )
@@ -375,6 +375,7 @@ build_plot_continuous_estimates <-
         plot_ci <- plot_ci +
           ggplot2::scale_fill_continuous(
             type = color_palette,
+            trans = 'reverse',
             name = "",
             limits = c(1, 0),
             breaks = seq(0, 1, by = 0.25)
@@ -384,7 +385,6 @@ build_plot_continuous_estimates <-
           ggplot2::scale_fill_continuous(
             type = color_palette,
             name = "",
-            trans = 'reverse',
             limits = c(0, 1),
             breaks = seq(0, 1, by = 0.25)
           )
