@@ -139,10 +139,10 @@ get_est_numerical_continuous <- function(model = NULL,
           "EV" = median(x),
           "SE" = sd(x),
           "p" = ifelse(twotailed,
-                       2 * pnorm(abs(
-                         median(x) / sd(x)
-                       ), lower.tail = FALSE),
-                       mean(x <= 0)),
+                       2 * pnorm(abs(median(x) / sd(x)), lower.tail = FALSE),
+                       ifelse(type == "bayesian",
+                              mean(x >= 0),
+                              mean(x <= 0))),
           "lower" = ifelse(
             twotailed,
             median(x) + qnorm(alpha / 2) * sd(x),
@@ -199,10 +199,14 @@ get_est_numerical_continuous <- function(model = NULL,
                     "SE" = sd(x),
                     "p" = ifelse(
                       twotailed,
-                      2 * stats::pnorm(abs(
-                        stats::median(x) / stats::sd(x)
-                      ), lower.tail = FALSE),
-                      mean(x <= 0)
+                      2 * stats::pnorm(abs(stats::median(x) / stats::sd(x)), lower.tail = FALSE),
+                      ifelse(
+                        twotailed,
+                        2 * pnorm(abs(median(x) / sd(x)), lower.tail = FALSE),
+                        ifelse(type == "bayesian",
+                               mean(x >= 0),
+                               mean(x <= 0))
+                      )
                     ),
                     "lower" = ifelse(
                       twotailed,
