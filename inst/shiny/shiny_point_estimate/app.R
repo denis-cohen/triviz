@@ -23,7 +23,6 @@ plotModal <- function(session, id, groups) {
         dnorm(xvals, contrasts[i, 1, j], contrasts[i, 2, j])
       y_mid <- 0.5 * max(yvals)
     } else {
-      print(str(contrasts_draws))
       xrange <- contrasts_draws[i, , j] %>%
         range(na.rm = TRUE)
       yvals <- contrasts_draws[i, , j]

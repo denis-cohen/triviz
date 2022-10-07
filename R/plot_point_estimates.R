@@ -109,31 +109,41 @@ plot_point_estimates <- function(estimates,
     return(plot_ci)
   }
 
-  shiny::shinyOptions(
-    ev = estimates$expected_values,
-    contrasts = estimates$contrasts,
-    type = type,
-    ev_draws = ifelse(
-      type == "analytical",
-      NA,
-      estimates$expected_values_draws
-    ),
-    contrasts_draws = ifelse(
-      type == "analytical",
-      NA,
-      estimates$contrasts_draws
-    ),
-    groups = rev(seq(
-      1, nrow(estimates$expected_values), 1
-    )),
-    round_dec = round_dec,
-    x_min = min(estimates$expected_values$lower) - 0.1 * span,
-    x_max = max(estimates$expected_values$upper) + 0.1 * span,
-    color_palette = color_palette,
-    p_val_threshold = p_val_threshold,
-    p_val_type = p_val_type,
-    p_bars = p_bars
-  )
+  if (type == "analytical") {
+    shiny::shinyOptions(
+      ev = estimates$expected_values,
+      contrasts = estimates$contrasts,
+      type = type,
+      groups = rev(seq(
+        1, nrow(estimates$expected_values), 1
+      )),
+      round_dec = round_dec,
+      x_min = min(estimates$expected_values$lower) - 0.1 * span,
+      x_max = max(estimates$expected_values$upper) + 0.1 * span,
+      color_palette = color_palette,
+      p_val_threshold = p_val_threshold,
+      p_val_type = p_val_type,
+      p_bars = p_bars
+    )
+  } else {
+    shiny::shinyOptions(
+      ev = estimates$expected_values,
+      contrasts = estimates$contrasts,
+      type = type,
+      ev_draws = estimates$expected_values_draws,
+      contrasts_draws = estimates$contrasts_draws,
+      groups = rev(seq(
+        1, nrow(estimates$expected_values), 1
+      )),
+      round_dec = round_dec,
+      x_min = min(estimates$expected_values$lower) - 0.1 * span,
+      x_max = max(estimates$expected_values$upper) + 0.1 * span,
+      color_palette = color_palette,
+      p_val_threshold = p_val_threshold,
+      p_val_type = p_val_type,
+      p_bars = p_bars
+    )
+  }
 
   # Look for shiny app directory
   appDir <-
