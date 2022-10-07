@@ -20,7 +20,7 @@ plotModal <- function(session, id) {
       ) +
       ggplot2::xlab(variable_caption) +
       ggplot2::ylab("First Difference") +
-      ggplot2::ggtitle(paste0(group2, " - ", group1)) +
+      ggplot2::ggtitle(paste0(group1, " - ", group2)) +
       ggplot2::scale_x_continuous(expand = c(0, 0),
                                   breaks = scales::breaks_extended(n_ticks_x)) +
       ggplot2::scale_y_continuous(expand = c(0, 0),
@@ -40,9 +40,9 @@ plotModal <- function(session, id) {
         ),
         ggplot2::aes(
           x = x,
-          y = y,
-          ymin = lwr,
-          ymax = upr
+          y = -y,
+          ymin = -lwr,
+          ymax = -upr
         ),
         alpha = 0.1
       )
