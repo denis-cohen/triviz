@@ -281,7 +281,7 @@ build_plot_continuous_estimates <-
                 ggplot2::scale_fill_continuous(type = color_palette,
                                                trans = "reverse",
                                                "",
-                                               limits = c(1, 0))
+                                               limits = c(0, 1))
             } else {
               p_val_plot <- p_val_plot +
                 ggplot2::scale_fill_continuous(
@@ -377,7 +377,7 @@ build_plot_continuous_estimates <-
             type = color_palette,
             trans = 'reverse',
             name = "",
-            limits = c(1, 0),
+            limits = c(0, 1),
             breaks = seq(0, 1, by = 0.25)
           )
       } else {
