@@ -285,7 +285,6 @@ build_plot_continuous_estimates <-
               p_val_plot <- p_val_plot +
                 ggplot2::scale_fill_continuous(
                   type = color_palette,
-                  trans = "reverse",
                   "",
                   limits = c(1, 0)
                 )
