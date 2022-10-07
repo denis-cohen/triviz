@@ -70,6 +70,7 @@ plotModal <- function(session, id, groups) {
           col = adjustcolor("gray50", alpha.f = .5),
           border = adjustcolor("gray10", alpha.f = .5)
         )
+        box()
       }
       arrows(
         lower,
