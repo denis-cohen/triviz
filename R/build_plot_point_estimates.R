@@ -315,11 +315,10 @@ build_plot_point_estimates <-
                         width = 0,
                         ggplot2::aes(fill = p, x = 0, y = p))
 
-    if (type %in% c("analytical", "simulation", "bootstrap")) {
+    if (type == "bayesian") {
       plot_ci <- plot_ci +
         ggplot2::scale_fill_continuous(
           type = color_palette,
-          trans = 'reverse',
           "",
           limits = c(0, 1),
           breaks = seq(0, 1, by = 0.25)
@@ -328,8 +327,9 @@ build_plot_point_estimates <-
       plot_ci <- plot_ci +
         ggplot2::scale_fill_continuous(
           type = color_palette,
+          trans = 'reverse',
           "",
-          limits = c(0, 1),
+          limits = c(1, 0),
           breaks = seq(0, 1, by = 0.25)
         )
     }
