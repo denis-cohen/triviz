@@ -376,7 +376,6 @@ build_plot_continuous_estimates <-
           ggplot2::scale_fill_continuous(
             type = color_palette,
             name = "",
-            trans = 'reverse',
             limits = c(1, 0),
             breaks = seq(0, 1, by = 0.25)
           )
@@ -385,6 +384,7 @@ build_plot_continuous_estimates <-
           ggplot2::scale_fill_continuous(
             type = color_palette,
             name = "",
+            trans = 'reverse',
             limits = c(0, 1),
             breaks = seq(0, 1, by = 0.25)
           )
