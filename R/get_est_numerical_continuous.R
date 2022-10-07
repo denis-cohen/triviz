@@ -160,6 +160,8 @@ get_est_numerical_continuous <- function(model = NULL,
         dplyr::mutate(!!as.name(continuous_variable) := x_seq[j])
     )
   }
+  ev <- ev %>%
+    dplyr::arrange(Group, !!as.name(continuous_variable))
 
   ## Pairwise contrasts (draws)
   contrasts_draws <- array(NA, dim = c(length(levels) - 1L,
