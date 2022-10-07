@@ -1,4 +1,4 @@
-utils::globalVariables(c("exp_val", "stat", "pval", "tooltip", "x", "y"))
+utils::globalVariables(c("stat", "pval", "tooltip", "x", "y"))
 
 # Plot first difference distributions in a modal
 plotModal <- function(session, id) {
