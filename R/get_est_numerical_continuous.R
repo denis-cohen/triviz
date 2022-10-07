@@ -239,7 +239,7 @@ get_est_numerical_continuous <- function(model = NULL,
   ## Return value
   output <- list(
     "expected_values" = ev,
-    "contrasts" = contrasts,
+    "contrasts" = contrast_values,
     "expected_values_draws" = ev_draws,
     "contrasts_draws" = contrasts_draws,
     "type" = type,
