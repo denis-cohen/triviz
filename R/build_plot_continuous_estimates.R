@@ -278,17 +278,17 @@ build_plot_continuous_estimates <-
           if (!one_tailed_test) {
             if (type %in% c("analytical", "simulation", "bootstrap")) {
               p_val_plot <- p_val_plot +
-                ggplot2::scale_fill_continuous(type = color_palette,
-                                               trans = "reverse",
-                                               "",
-                                               limits = c(0, 1))
-            } else {
-              p_val_plot <- p_val_plot +
                 ggplot2::scale_fill_continuous(
                   type = color_palette,
                   "",
                   limits = c(0, 1)
                 )
+            } else {
+              p_val_plot <- p_val_plot +
+                ggplot2::scale_fill_continuous(type = color_palette,
+                                               trans = "reverse",
+                                               "",
+                                               limits = c(1, 0))
             }
           } else {
             if (type == "bayesian") {
@@ -377,7 +377,7 @@ build_plot_continuous_estimates <-
             type = color_palette,
             trans = 'reverse',
             name = "",
-            limits = c(0, 1),
+            limits = c(1, 0),
             breaks = seq(0, 1, by = 0.25)
           )
       } else {
