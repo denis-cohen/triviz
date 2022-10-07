@@ -281,7 +281,7 @@ build_plot_continuous_estimates <-
                 ggplot2::scale_fill_continuous(
                   type = color_palette,
                   "",
-                  limits = c(1, 0)
+                  limits = c(0, 1)
                 )
             } else {
               p_val_plot <- p_val_plot +
@@ -385,7 +385,7 @@ build_plot_continuous_estimates <-
           ggplot2::scale_fill_continuous(
             type = color_palette,
             name = "",
-            limits = c(1, 0),
+            limits = c(0, 1),
             breaks = seq(0, 1, by = 0.25)
           )
       }
