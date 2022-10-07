@@ -25,6 +25,7 @@ plotModal <- function(session, id, groups) {
     } else {
       xrange <- contrasts_draws[i, , j] %>%
         range(na.rm = TRUE)
+      xrange <- xrange + c(-0.15, .15) * abs(diff(xrange))
       yvals <- contrasts_draws[i, , j]
     }
     point <- contrasts[i, 1, j]
@@ -54,7 +55,8 @@ plotModal <- function(session, id, groups) {
         )
       } else {
         histogram <- hist(yvals,
-                          plot = FALSE)
+                          plot = FALSE,
+                          breaks = 50)
         histogram$density <-
           histogram$density / sum(histogram$density)
         y_mid <- 0.5 * max(histogram$density)
