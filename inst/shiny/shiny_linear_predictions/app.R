@@ -7,7 +7,7 @@ plotModal <- function(session, id) {
     group1 <- gsub("(.*)\\+.*", "\\1", id)
 
     filtered_group <- contrasts %>%
-      filter(Group1 == group2, Group2 == group1)
+      filter(Group1 == group1, Group2 == group2)
 
     n_ticks_x <- 5
     fd_predictions <- ggplot2::ggplot() +
