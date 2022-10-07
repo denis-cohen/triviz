@@ -129,6 +129,7 @@ build_plot_continuous_estimates <-
         data = caption_exp,
         ggplot2::aes(label = caption_exp),
         size = 2.5,
+        x = median(unique(ev[[variable]]), na.rm = TRUE),
         y = -max_y_range / n_ticks_y
       ) +
       ggplot2::geom_text(

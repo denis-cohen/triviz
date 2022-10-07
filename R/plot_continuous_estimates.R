@@ -93,7 +93,6 @@ plot_continuous_estimates <- function(estimates,
         p_val_threshold = p_val_threshold,
         p_val_type = p_val_type
       )
-    print(plot_ci)
     return(plot_ci)
   }
 

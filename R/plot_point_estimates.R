@@ -106,7 +106,6 @@ plot_point_estimates <- function(estimates,
         p_val_type = p_val_type,
         p_bars = p_bars
       )
-    print(plot_ci)
     return(plot_ci)
   }
 
