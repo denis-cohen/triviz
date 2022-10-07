@@ -114,12 +114,12 @@ plot_point_estimates <- function(estimates,
     contrasts = estimates$contrasts,
     type = type,
     ev_draws = ifelse(
-      !exists('expected_values_draws', where = estimates),
+      type == "analytical",
       NA,
       estimates$expected_values_draws
     ),
     contrasts_draws = ifelse(
-      !exists('contrasts_draws', where = estimates),
+      type == "analytical",
       NA,
       estimates$contrasts_draws
     ),

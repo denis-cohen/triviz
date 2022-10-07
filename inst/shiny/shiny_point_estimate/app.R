@@ -80,7 +80,8 @@ plotModal <- function(session, id, groups) {
       points(point,
              y_mid,
              pch = 19)
-      abline(v = 0, col = "red")
+      if (sign(prod(xrange)) == -1)
+        abline(v = 0, col = "red")
     })
 
     ggiraph::girafe(code = print(distribution))
