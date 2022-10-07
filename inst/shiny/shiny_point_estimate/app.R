@@ -66,8 +66,9 @@ plotModal <- function(session, id, groups) {
           main = paste0(ev[i + 1, ]$Group, " - ", ev[j, ]$Group),
           xlab = "First Difference",
           ylab = "Proportion of draws",
-          xlim = c(min(yvals),
-                   max(yvals))
+          xlim = xrange,
+          col = adjustcolor("gray50", alpha.f = .5),
+          border = adjustcolor("gray10", alpha.f = .5)
         )
       }
       arrows(
