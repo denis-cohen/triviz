@@ -34,15 +34,15 @@ plotModal <- function(session, id) {
       ggplot2::geom_ribbon(
         data = cbind.data.frame(
           x = filtered_group[[variable]],
-          y = filtered_group$FD,
-          lwr = filtered_group$lower,
-          upr = filtered_group$upper
+          y = -filtered_group$FD,
+          lwr = -filtered_group$lower,
+          upr = -filtered_group$upper
         ),
         ggplot2::aes(
           x = x,
-          y = -y,
-          ymin = -lwr,
-          ymax = -upr
+          y = y,
+          ymin = lwr,
+          ymax = upr
         ),
         alpha = 0.1
       )
