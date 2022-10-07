@@ -115,7 +115,7 @@ get_est_numerical <- function(model = NULL,
       "p" = ifelse(
         twotailed,
         2 * stats::pnorm(abs(stats::median(x) / stats::sd(x)), lower.tail = FALSE),
-        mean(x <= 0)
+        ifelse(type == "bayesian", mean(x >= 0), mean(x <= 0))
       ),
       "lower" = ifelse(
         twotailed,
@@ -157,7 +157,7 @@ get_est_numerical <- function(model = NULL,
       "p" = ifelse(
         twotailed,
         2 * stats::pnorm(abs(stats::median(x) / stats::sd(x)), lower.tail = FALSE),
-        mean(x <= 0)
+        ifelse(type == "bayesian", mean(x >= 0), mean(x <= 0))
       ),
       "lower" = ifelse(
         twotailed,

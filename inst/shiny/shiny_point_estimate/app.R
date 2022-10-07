@@ -94,12 +94,12 @@ plotModal <- function(session, id, groups) {
 
 ui <- shiny::fluidPage(
   # Arrange the layout
-  shiny::titlePanel("Triangular visualization of pairwise first differences"),
+  shiny::titlePanel("Triangular visualization"),
   shiny::fluidPage(downloadButton('save', label = "Save as PDF")),
   shiny::fluidRow(
     tags$div(
       style = "position: relative;",
-      ggiraph::ggiraphOutput(outputId = "triviz", height = "900px")
+      ggiraph::ggiraphOutput(outputId = "triangularmatrix", height = "900px")
     )
   )
 )
