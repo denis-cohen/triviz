@@ -7,7 +7,7 @@ plotModal <- function(session, id) {
     group1 <- gsub("(.*)\\+.*", "\\1", id)
 
     filtered_group <- contrasts %>%
-      filter(Group1 == group1, Group2 == group2)
+      filter(Group1 == group2, Group2 == group1)
 
     n_ticks_x <- 5
     fd_predictions <- ggplot2::ggplot() +
@@ -34,9 +34,9 @@ plotModal <- function(session, id) {
       ggplot2::geom_ribbon(
         data = cbind.data.frame(
           x = filtered_group[[variable]],
-          y = -filtered_group$FD,
-          lwr = -filtered_group$lower,
-          upr = -filtered_group$upper
+          y = filtered_group$FD,
+          lwr = filtered_group$lower,
+          upr = filtered_group$upper
         ),
         ggplot2::aes(
           x = x,
