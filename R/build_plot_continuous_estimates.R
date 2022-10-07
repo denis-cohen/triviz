@@ -127,9 +127,8 @@ build_plot_continuous_estimates <-
     plot_ci <- plot_ci +
       ggplot2::geom_text(
         data = caption_exp,
-        ggplot2::aes(label = exp_val),
+        ggplot2::aes(label = caption_exp),
         size = 2.5,
-        x = (x_min + x_max) / 2,
         y = -max_y_range / n_ticks_y
       ) +
       ggplot2::geom_text(
