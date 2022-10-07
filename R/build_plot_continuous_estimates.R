@@ -310,18 +310,22 @@ build_plot_continuous_estimates <-
             if (!one_tailed_test) {
               p_val_plot <- p_val_plot +
                 ggplot2::geom_hline(
-                  yintercept = ifelse(
-                    type == "bayesian",
-                    1 - p_val_threshold,
-                    p_val_threshold
-                  ),
-                  size = .5
+                  yintercept = ifelse(type == "bayesian",
+                                      1 - p_val_threshold,
+                                      p_val_threshold),
+                  size = .5,
+                  linetype = "dotted"
                 )
             } else {
               p_val_plot <- p_val_plot +
-                ggplot2::geom_hline(yintercept = p_val_threshold, size = .5) +
-                ggplot2::geom_hline(yintercept = 1 - p_val_threshold,
-                                    size = .5)
+                ggplot2::geom_hline(yintercept = p_val_threshold,
+                                    size = .5,
+                                    linetype = "dotted") +
+                ggplot2::geom_hline(
+                  yintercept = 1 - p_val_threshold,
+                  size = .5,
+                  linetype = "dotted"
+                )
             }
           }
 
