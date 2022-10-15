@@ -303,13 +303,13 @@ build_plot_point_estimates <-
     }
 
     # Add legend with custom color
-    plot_ci_legend <- ggplot2::ggplot() +
+    plot_ci <- plot_ci +
       ggplot2::geom_col(data = ev,
                         width = 0,
                         ggplot2::aes(fill = p, x = 0, y = p))
 
     if (type == "bayesian") {
-      plot_ci_legend <- plot_ci_legend +
+      plot_ci <- plot_ci +
         ggplot2::scale_fill_continuous(
           type = color_palette,
           "",
@@ -317,7 +317,7 @@ build_plot_point_estimates <-
           breaks = seq(0, 1, by = 0.25)
         )
     } else {
-      plot_ci_legend <- plot_ci_legend +
+      plot_ci <- plot_ci +
         ggplot2::scale_fill_continuous(
           type = color_palette,
           trans = 'reverse',
@@ -329,7 +329,9 @@ build_plot_point_estimates <-
 
     plot_ci_combined <- cowplot::plot_grid(plot_ci +
                                             ggplot2::theme(legend.position = "none"),
-                                          cowplot::get_legend(plot_ci_legend),
+                                          cowplot::get_legend(plot_ci),
+                                          rel_widths = c(0.9, 0.1),
+                                          rel_heights = 1,
                                           ncol = 2)
 
     return(plot_ci_combined)
