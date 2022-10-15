@@ -124,6 +124,7 @@ build_plot_point_estimates <-
       )
 
     # Draw first differences with Confidence Intervals
+    boxes <- ggplot2::ggplot()
     rows <-
       if (is.null(nrow(contrasts[, , 1])))
         1
@@ -177,7 +178,7 @@ build_plot_point_estimates <-
           )
         )
         if (i == j) {
-          plot_ci <- plot_ci +
+          boxes <- boxes +
             ggplot2::geom_segment(
               data = data,
               ggplot2::aes(
@@ -258,7 +259,7 @@ build_plot_point_estimates <-
               )
           } else {
             # Draw Patterns and interactive rectangles (right part)
-            plot_ci <- plot_ci +
+            boxes <- boxes +
               ggpattern::geom_rect_pattern(
                 data = data,
                 ggplot2::aes(
@@ -281,7 +282,7 @@ build_plot_point_estimates <-
               ) +
               ggplot2::guides(pattern = "none")
           }
-          plot_ci <- plot_ci +
+          boxes <- boxes +
             ggiraph::geom_rect_interactive(
               data = data,
               ggplot2::aes(
@@ -303,13 +304,13 @@ build_plot_point_estimates <-
     }
 
     # Add legend with custom color
-    plot_ci <- plot_ci +
+    boxes <- boxes +
       ggplot2::geom_col(data = ev,
                         width = 0,
                         ggplot2::aes(fill = p, x = 0, y = p))
 
     if (type == "bayesian") {
-      plot_ci <- plot_ci +
+      boxes <- boxes +
         ggplot2::scale_fill_continuous(
           type = color_palette,
           "",
@@ -317,7 +318,7 @@ build_plot_point_estimates <-
           breaks = seq(0, 1, by = 0.25)
         )
     } else {
-      plot_ci <- plot_ci +
+      boxes <- boxes +
         ggplot2::scale_fill_continuous(
           type = color_palette,
           trans = 'reverse',
@@ -327,12 +328,15 @@ build_plot_point_estimates <-
         )
     }
 
-    plot_ci_combined <- cowplot::plot_grid(plot_ci +
-                                            ggplot2::theme(legend.position = "none"),
-                                          cowplot::get_legend(plot_ci),
-                                          rel_widths = c(0.9, 0.1),
-                                          rel_heights = 1,
-                                          ncol = 2)
+    print("test")
+
+    plot_ci_combined <- cowplot::plot_grid(plot_ci,
+                                           boxes +
+                                             ggplot2::theme(legend.position = "none"),
+                                           cowplot::get_legend(plot_ci),
+                                           rel_widths = c(0.9, 0.1),
+                                           rel_heights = 1,
+                                           ncol = 3)
 
     return(plot_ci_combined)
   }
