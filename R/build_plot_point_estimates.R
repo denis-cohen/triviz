@@ -26,7 +26,6 @@ build_plot_point_estimates <-
     )
     x_max <- breaks[length(breaks)]
     x_min <- breaks[1]
-    ratio <- abs(x_max - x_min) / n_ticks
 
     plot_ci <-
       ggplot2::ggplot() + ggplot2::theme(
@@ -35,7 +34,9 @@ build_plot_point_estimates <-
         axis.text.x = ggplot2::element_text(size =
                                               7),
         axis.ticks.y = ggplot2::element_blank(),
-        axis.title = ggplot2::element_blank(),
+        axis.title.y = ggplot2::element_blank(),
+        axis.title.x = ggplot2::element_text(size =
+                                              7, face="bold"),
         panel.background = ggplot2::element_blank(),
         panel.grid.major.y = ggplot2::element_blank(),
         panel.grid.minor.y = ggplot2::element_blank(),
@@ -46,19 +47,12 @@ build_plot_point_estimates <-
           size = 0.5
         ),
         panel.grid.minor.x = ggplot2::element_blank(),
-        panel.spacing = grid::unit(c(1, 0, 1, 1), "cm"),
+        panel.spacing = grid::unit(c(1, 0, 1, 0), "cm"),
         plot.margin = grid::unit(c(1, 0, 1, 1), "cm")
       ) +
-      ggplot2::scale_x_continuous(breaks = breaks, expand = c(0, 0)) +
-      ggplot2::coord_fixed(ratio = ratio, clip = "off") +
-      ggplot2::scale_y_continuous(limits = c(0, length(groups)), expand = c(0, 0))
-
-
-    # Define axis descriptions
-    caption_exp <- data.frame(exp_val = c("Expected Values"))
-    caption_stat <-
-      data.frame(stat = c("Statistical Significance of\nPairwise Differences"))
-    caption_pval <- data.frame(pval = c(p_val_type))
+      ggplot2::xlab("Expected Values\n") +
+      ggplot2::scale_x_continuous(breaks = breaks, expand = c(0, 0.01, 0, 0)) +
+      ggplot2::scale_y_continuous(limits = c(0, length(groups)), expand = c(0, 0, 0, 0))
 
     # Draw basic layout of left part of the plot
     plot_ci <- plot_ci +
@@ -75,7 +69,7 @@ build_plot_point_estimates <-
       ) +
       ggplot2::geom_text(
         ggplot2::aes(
-          x = x_min - .1 * ratio,
+          x = x_min - (breaks[2] - breaks[1]) / 10,
           y = groups - .5,
           label = ev$Group
         ),
@@ -93,43 +87,32 @@ build_plot_point_estimates <-
         yend = groups - .5
       ))
 
-    # Write axis labels
-    plot_ci <- plot_ci +
-      ggplot2::geom_text(
-        data = caption_exp,
-        ggplot2::aes(label = exp_val),
-        size = 2.5,
-        x = (x_min + x_max) / 2,
-        y = 0,
-        vjust = grid::unit(4, "cm")
-      ) +
-      ggplot2::geom_text(
-        data = caption_stat,
-        ggplot2::aes(label = stat),
-        size = 2.5,
-        x = (x_max + (x_max + (length(
-          groups
-        ) - 1) * ratio)) / 2,
-        y = 0,
-        vjust = grid::unit(2, "cm")
-      ) +
-      ggplot2::geom_text(
-        data = caption_pval,
-        ggplot2::aes(label = pval),
-        size = 2.5,
-        x = (x_max + (length(groups) - 1) * ratio),
-        y = 0,
-        vjust = grid::unit(4, "cm"),
-        hjust = grid::unit(-0.5, "cm")
-      )
-
     # Draw first differences with Confidence Intervals
-    boxes <- ggplot2::ggplot()
-    rows <-
-      if (is.null(nrow(contrasts[, , 1])))
-        1
-    else
-      nrow(contrasts[, , 1])
+    boxes <- ggplot2::ggplot() +
+      ggplot2::theme(
+        axis.line.y = ggplot2::element_blank(),
+        axis.text.y = ggplot2::element_blank(),
+        axis.text.x = ggplot2::element_text(size =
+                                              7, color = "white"),
+        axis.ticks.y = ggplot2::element_blank(),
+        axis.ticks.x = ggplot2::element_blank(),
+        axis.title.y = ggplot2::element_blank(),
+        axis.title.x = ggplot2::element_text(size =
+                                               7, face="bold"),
+        axis.ticks.length.y = grid::unit(0, "pt"),
+        panel.background = ggplot2::element_blank(),
+        panel.grid.major.y = ggplot2::element_blank(),
+        panel.grid.minor.y = ggplot2::element_blank(),
+        panel.border = ggplot2::element_blank(),
+        panel.grid.minor.x = ggplot2::element_blank(),
+        panel.spacing = grid::unit(c(1, 0, 1, 0), "cm"),
+        plot.margin = grid::unit(c(1, 0, 1, 0), "cm")
+      ) +
+      ggplot2::xlab("Statistical Significance of\nPairwise Differences") +
+      ggplot2::scale_x_continuous(breaks = c(1), expand = c(0, 0)) +
+      ggplot2::scale_y_continuous(limits = c(0, length(contrasts[1, 1, ])), expand = c(0, 0))
+
+    rows <- ifelse((is.null(nrow(contrasts[, , 1]))), 1, nrow(contrasts[, , 1]))
     for (i in 1:length(contrasts[1, 1, ])) {
       for (j in rows:1) {
         data <- cbind.data.frame(
@@ -182,20 +165,18 @@ build_plot_point_estimates <-
             ggplot2::geom_segment(
               data = data,
               ggplot2::aes(
-                x = x * ratio + abs(x_max),
+                x = x,
                 y = length(contrasts[1, 1, ]) - y + .5,
-                xend = (x + 0.5) * ratio +
-                  abs(x_max),
+                xend = (x + 0.5),
                 yend = length(contrasts[1, 1, ]) - y + .5
               )
             ) +
             ggplot2::geom_segment(
               data = data,
               ggplot2::aes(
-                x = (x + 0.5) * ratio + x_max,
+                x = (x + 0.5),
                 y = length(contrasts[1, 1, ]) - y + .5,
-                xend = (x + 0.5) * ratio +
-                  abs(x_max),
+                xend = (x + 0.5),
                 yend = length(contrasts[1, 1, ]) - y
               ),
               arrow = ggplot2::arrow(length = grid::unit(0.25, "cm"))
@@ -249,26 +230,25 @@ build_plot_point_estimates <-
             }
 
             # Draw p-value box (with interactive tooltip)
-            plot_ci <- plot_ci +
+            boxes <- boxes +
               ggplot2::annotation_custom(
                 grob = ggplot2::ggplotGrob(p_val_plot),
-                xmin = data$x * ratio + abs(x_max),
-                xmax = (data$x + 1) * ratio + abs(x_max),
+                xmin = data$x,
+                xmax = (data$x + 1),
                 ymin = length(contrasts[1, 1, ]) - data$y,
                 ymax = length(contrasts[1, 1, ]) - data$y - 1
               )
           } else {
             # Draw Patterns and interactive rectangles (right part)
             boxes <- boxes +
+              ggpattern::scale_pattern_manual(values = c("none", "stripe")) +
               ggpattern::geom_rect_pattern(
                 data = data,
                 ggplot2::aes(
                   pattern = hatched,
                   fill = p_val,
-                  xmin = x * ratio +
-                    abs(x_max),
-                  xmax = (x + 1) * ratio +
-                    abs(x_max),
+                  xmin = x,
+                  xmax = (x + 1),
                   ymin = length(contrasts[1, 1, ]) -
                     y,
                   ymax = length(contrasts[1, 1, ]) -
@@ -282,21 +262,21 @@ build_plot_point_estimates <-
               ) +
               ggplot2::guides(pattern = "none")
           }
+
           boxes <- boxes +
             ggiraph::geom_rect_interactive(
               data = data,
               ggplot2::aes(
-                xmin = x * ratio + abs(x_max),
-                xmax = (x + 1) * ratio +
-                  abs(x_max),
+                xmin = x,
+                xmax = (x + 1),
                 ymin = length(contrasts[1, 1, ]) -
                   y,
                 ymax = length(contrasts[1, 1, ]) -
                   y - 1,
                 data_id = paste0(x, "_", y, "_fd"),
-                colour = "black",
                 tooltip = tooltip
               ),
+              color = "black",
               alpha = 0.01
             )
         }
@@ -315,7 +295,10 @@ build_plot_point_estimates <-
           type = color_palette,
           "",
           limits = c(0, 1),
-          breaks = seq(0, 1, by = 0.25)
+          breaks = seq(0, 1, by = 0.25),
+          guide = ggplot2::guide_legend(title = p_val_type,
+                                        title.position = "top",
+                                        keyheight = 1)
         )
     } else {
       boxes <- boxes +
@@ -324,18 +307,26 @@ build_plot_point_estimates <-
           trans = 'reverse',
           "",
           limits = c(1, 0),
-          breaks = seq(0, 1, by = 0.25)
+          breaks = seq(0, 1, by = 0.25),
+          guide = ggplot2::guide_legend(title = p_val_type,
+                                        title.position = "top",
+                                        keyheight = 1)
         )
     }
-
-    print("test")
 
     plot_ci_combined <- cowplot::plot_grid(plot_ci,
                                            boxes +
                                              ggplot2::theme(legend.position = "none"),
-                                           cowplot::get_legend(plot_ci),
-                                           rel_widths = c(0.9, 0.1),
-                                           rel_heights = 1,
+                                           cowplot::get_legend(
+                                             boxes +
+                                               ggplot2::theme(legend.key.height = grid::unit(2, 'cm'),
+                                                              legend.text = ggplot2::element_text(size = 7))),
+                                           #labels = c('', '', p_val_type),
+                                           #label_fontface = "bold",
+                                           #label_size = 7,
+                                           #label_x = 0.1, label_y = 0, vjust = -8,
+                                           rel_widths = c(0.45, 0.45, 0.1),
+                                           nrow = 1,
                                            ncol = 3)
 
     return(plot_ci_combined)
