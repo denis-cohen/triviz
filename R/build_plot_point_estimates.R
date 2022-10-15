@@ -328,7 +328,7 @@ build_plot_point_estimates <-
     }
 
     plot_ci_combined <- ggpubr::ggarrange(plot_ci +
-                                            ggplot2::theme(show.legend = FALSE),
+                                            ggplot2::theme(legend.position = "none"),
                                           plot_ci_legend,
                                           ncol = 2)
 
