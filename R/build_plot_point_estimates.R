@@ -47,14 +47,7 @@ build_plot_point_estimates <-
         ),
         panel.grid.minor.x = ggplot2::element_blank(),
         panel.spacing = grid::unit(c(1, 0, 1, 1), "cm"),
-        plot.margin = grid::unit(c(1, 0, 1, 1), "cm"),
-        legend.box.margin = ggplot2::margin(0, 0, 0, 0),
-        legend.key.width = grid::unit(0.25, "cm"),
-        legend.key.height = grid::unit(length(groups) * .25, "cm"),
-        legend.margin = ggplot2::margin(c(0, .5, 0, 0), unit =
-                                          'cm'),
-        legend.text = ggplot2::element_text(size =
-                                              7)
+        plot.margin = grid::unit(c(1, 0, 1, 1), "cm")
       ) +
       ggplot2::scale_x_continuous(breaks = breaks, expand = c(0, 0)) +
       ggplot2::coord_fixed(ratio = ratio, clip = "off") +
@@ -310,13 +303,13 @@ build_plot_point_estimates <-
     }
 
     # Add legend with custom color
-    plot_ci <- plot_ci +
+    plot_ci_legend <- ggplot2::ggplot() +
       ggplot2::geom_col(data = ev,
                         width = 0,
                         ggplot2::aes(fill = p, x = 0, y = p))
 
     if (type == "bayesian") {
-      plot_ci <- plot_ci +
+      plot_ci_legend <- plot_ci_legend +
         ggplot2::scale_fill_continuous(
           type = color_palette,
           "",
@@ -324,7 +317,7 @@ build_plot_point_estimates <-
           breaks = seq(0, 1, by = 0.25)
         )
     } else {
-      plot_ci <- plot_ci +
+      plot_ci_legend <- plot_ci_legend +
         ggplot2::scale_fill_continuous(
           type = color_palette,
           trans = 'reverse',
@@ -334,5 +327,10 @@ build_plot_point_estimates <-
         )
     }
 
-    return(plot_ci)
+    plot_ci_combined <- ggpubr::ggarrange(plot_ci +
+                                            ggplot2::theme(show.legend = FALSE),
+                                          plot_ci_legend,
+                                          ncol = 2)
+
+    return(plot_ci_combined)
   }
