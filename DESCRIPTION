@@ -29,7 +29,8 @@ Imports:
     margins (>= 0.3.26),
     ggpattern (>= 0.4.2),
     prediction (>= 0.3.14),
-    labeling (>= 0.4.2)
+    labeling (>= 0.4.2),
+    cowplot (>= 1.1.1)
 Remotes:
     github::coolbutuseless/ggpattern
 Suggests:

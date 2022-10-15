@@ -327,9 +327,9 @@ build_plot_point_estimates <-
         )
     }
 
-    plot_ci_combined <- ggpubr::ggarrange(plot_ci +
+    plot_ci_combined <- cowplot::plot_grid(plot_ci +
                                             ggplot2::theme(legend.position = "none"),
-                                          plot_ci_legend,
+                                          cowplot::get_legend(plot_ci_legend),
                                           ncol = 2)
 
     return(plot_ci_combined)
