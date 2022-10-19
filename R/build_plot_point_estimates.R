@@ -317,5 +317,5 @@ build_plot_point_estimates <-
       ggplot2::theme(legend.title=ggplot2::element_text(size=7, face = "bold"),
                      legend.text=ggplot2::element_text(size=7))
 
-    return(plot_ci_combined)
+    return(plot_ci)
   }
