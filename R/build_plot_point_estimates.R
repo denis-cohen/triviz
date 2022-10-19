@@ -50,9 +50,32 @@ build_plot_point_estimates <-
         panel.spacing = grid::unit(c(1, 0, 1, 0), "cm"),
         plot.margin = grid::unit(c(1, 0, 1, 1), "cm")
       ) +
-      ggplot2::xlab("Expected Values\n") +
-      ggplot2::scale_x_continuous(breaks = breaks, expand = c(0, 0.05, 0, 0)) +
+      ggplot2::scale_x_continuous(breaks = breaks, expand = c(0, 0.01, 0, 0)) +
       ggplot2::scale_y_continuous(limits = c(0, length(groups)), expand = c(0, 0, 0, 0))
+
+    # Define axis descriptions
+    caption_exp <- data.frame(exp_val = c("Expected Values"))
+    caption_stat <-
+      data.frame(stat = c("Statistical Significance of\nPairwise Differences"))
+
+    plot_ci <- plot_ci +
+      ggplot2::geom_text(
+        data = caption_exp,
+        ggplot2::aes(label = exp_val),
+        size = 2.5,
+        x = (x_min + x_max) / 2,
+        y = 0,
+        vjust = grid::unit(4, "cm")
+      ) +
+      ggplot2::geom_text(
+        data = caption_stat,
+        ggplot2::aes(label = stat),
+        size = 2.5,
+        x = (x_max + (x_max + (length(
+          groups
+        ) - 1) * ratio)) / 2,
+        y = 0,
+        vjust = grid::unit(2, "cm"))
 
     # Draw basic layout of left part of the plot
     plot_ci <- plot_ci +
@@ -88,30 +111,6 @@ build_plot_point_estimates <-
       ))
 
     # Draw first differences with Confidence Intervals
-    boxes <- ggplot2::ggplot() +
-      ggplot2::theme(
-        axis.line.y = ggplot2::element_blank(),
-        axis.text.y = ggplot2::element_blank(),
-        axis.text.x = ggplot2::element_text(size =
-                                              7, color = "white"),
-        axis.ticks.y = ggplot2::element_blank(),
-        axis.ticks.x = ggplot2::element_blank(),
-        axis.title.y = ggplot2::element_blank(),
-        axis.title.x = ggplot2::element_text(size =
-                                               7, face="bold"),
-        axis.ticks.length.y = grid::unit(0, "pt"),
-        panel.background = ggplot2::element_blank(),
-        panel.grid.major.y = ggplot2::element_blank(),
-        panel.grid.minor.y = ggplot2::element_blank(),
-        panel.border = ggplot2::element_blank(),
-        panel.grid.minor.x = ggplot2::element_blank(),
-        panel.spacing = grid::unit(c(1, 0, 1, 0), "cm"),
-        plot.margin = grid::unit(c(1, 0, 1, 0), "cm")
-      ) +
-      ggplot2::xlab("Statistical Significance of\nPairwise Differences") +
-      ggplot2::scale_x_continuous(breaks = c(1), expand = c(0, 0)) +
-      ggplot2::scale_y_continuous(limits = c(0, length(contrasts[1, 1, ])), expand = c(0, 0))
-
     rows <- ifelse((is.null(nrow(contrasts[, , 1]))), 1, nrow(contrasts[, , 1]))
     for (i in 1:length(contrasts[1, 1, ])) {
       for (j in rows:1) {
@@ -161,22 +160,24 @@ build_plot_point_estimates <-
           )
         )
         if (i == j) {
-          boxes <- boxes +
+          plot_ci <- plot_ci +
             ggplot2::geom_segment(
               data = data,
               ggplot2::aes(
-                x = x,
+                x = x * ratio + abs(x_max),,
                 y = length(contrasts[1, 1, ]) - y + .5,
-                xend = (x + 0.5),
+                xend = (x + 0.5) * ratio +
+                  abs(x_max),
                 yend = length(contrasts[1, 1, ]) - y + .5
               )
             ) +
             ggplot2::geom_segment(
               data = data,
               ggplot2::aes(
-                x = (x + 0.5),
+                x = (x + 0.5) * ratio + x_max,
                 y = length(contrasts[1, 1, ]) - y + .5,
-                xend = (x + 0.5),
+                xend =  (x + 0.5) * ratio +
+                  abs(x_max),
                 yend = length(contrasts[1, 1, ]) - y
               ),
               arrow = ggplot2::arrow(length = grid::unit(0.25, "cm"))
@@ -230,25 +231,25 @@ build_plot_point_estimates <-
             }
 
             # Draw p-value box (with interactive tooltip)
-            boxes <- boxes +
+            plot_ci <- plot_ci +
               ggplot2::annotation_custom(
                 grob = ggplot2::ggplotGrob(p_val_plot),
-                xmin = data$x,
-                xmax = (data$x + 1),
+                xmin = data$x * ratio + abs(x_max),
+                xmax = (data$x + 1) * ratio + abs(x_max),
                 ymin = length(contrasts[1, 1, ]) - data$y,
                 ymax = length(contrasts[1, 1, ]) - data$y - 1
               )
           } else {
             # Draw Patterns and interactive rectangles (right part)
-            boxes <- boxes +
-              ggpattern::scale_pattern_manual(values = c("none", "stripe")) +
+            plot_ci <- plot_ci +
               ggpattern::geom_rect_pattern(
                 data = data,
                 ggplot2::aes(
                   pattern = hatched,
                   fill = p_val,
-                  xmin = x,
-                  xmax = (x + 1),
+                  xmin = x * ratio + abs(x_max),
+                  xmax = (x + 1) * ratio +
+                    abs(x_max),
                   ymin = length(contrasts[1, 1, ]) -
                     y,
                   ymax = length(contrasts[1, 1, ]) -
@@ -263,12 +264,13 @@ build_plot_point_estimates <-
               ggplot2::guides(pattern = "none")
           }
 
-          boxes <- boxes +
+          plot_ci <- plot_ci +
             ggiraph::geom_rect_interactive(
               data = data,
               ggplot2::aes(
-                xmin = x,
-                xmax = (x + 1),
+                xmin = x * ratio + abs(x_max),
+                xmax = (x + 1) * ratio +
+                  abs(x_max),
                 ymin = length(contrasts[1, 1, ]) -
                   y,
                 ymax = length(contrasts[1, 1, ]) -
@@ -284,13 +286,13 @@ build_plot_point_estimates <-
     }
 
     # Add legend with custom color
-    boxes <- boxes +
+    plot_ci <- plot_ci +
       ggplot2::geom_col(data = ev,
                         width = 0,
                         ggplot2::aes(fill = p, x = 0, y = p))
 
     if (type == "bayesian") {
-      boxes <- boxes +
+      plot_ci <- plot_ci +
         ggplot2::scale_fill_continuous(
           type = color_palette,
           "",
@@ -298,7 +300,7 @@ build_plot_point_estimates <-
           breaks = seq(0, 1, by = 0.25)
         )
     } else {
-      boxes <- boxes +
+      plot_ci <- plot_ci +
         ggplot2::scale_fill_continuous(
           type = color_palette,
           trans = 'reverse',
@@ -308,22 +310,12 @@ build_plot_point_estimates <-
         )
     }
 
-    panel_height <- grid::unit(1,"npc") - sum(ggplot2::ggplotGrob(boxes)[["heights"]][-3]) - grid::unit(4,"cm")
-    boxes <- boxes + ggplot2::guides(fill = ggplot2::guide_colorbar(barheight=panel_height,
+    panel_height <- grid::unit(1,"npc") - sum(ggplot2::ggplotGrob(plot_ci)[["heights"]][-3]) - grid::unit(4,"cm")
+    plot_ci <- plot_ci + ggplot2::guides(fill = ggplot2::guide_colorbar(barheight=panel_height,
                                                                     title = p_val_type,
-                                                                    ))
-
-    plot_ci_combined <- cowplot::plot_grid(plot_ci,
-                                           boxes +
-                                             ggplot2::theme(legend.position = "none"),
-                                           cowplot::get_legend(
-                                             boxes +
-                                               ggplot2::theme(legend.title=ggplot2::element_text(size=7,
-                                                                                                 face = "bold"),
-                                                     legend.text=ggplot2::element_text(size=7))),
-                                           rel_widths = c(0.45, 0.45, 0.1),
-                                           nrow = 1,
-                                           ncol = 3)
+                                                                    )) +
+      ggplot2::theme(legend.title=ggplot2::element_text(size=7, face = "bold"),
+                     legend.text=ggplot2::element_text(size=7))
 
     return(plot_ci_combined)
   }
