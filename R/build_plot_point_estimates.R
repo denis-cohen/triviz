@@ -26,6 +26,7 @@ build_plot_point_estimates <-
     )
     x_max <- breaks[length(breaks)]
     x_min <- breaks[1]
+    ratio <- abs(x_max - x_min) / n_ticks
 
     plot_ci <-
       ggplot2::ggplot() + ggplot2::theme(
@@ -34,9 +35,7 @@ build_plot_point_estimates <-
         axis.text.x = ggplot2::element_text(size =
                                               7),
         axis.ticks.y = ggplot2::element_blank(),
-        axis.title.y = ggplot2::element_blank(),
-        axis.title.x = ggplot2::element_text(size =
-                                              7, face="bold"),
+        axis.title = ggplot2::element_blank(),
         panel.background = ggplot2::element_blank(),
         panel.grid.major.y = ggplot2::element_blank(),
         panel.grid.minor.y = ggplot2::element_blank(),
@@ -50,6 +49,7 @@ build_plot_point_estimates <-
         panel.spacing = grid::unit(c(1, 0, 1, 0), "cm"),
         plot.margin = grid::unit(c(1, 0, 1, 1), "cm")
       ) +
+      ggplot2::coord_fixed(ratio = ratio, clip = "off") +
       ggplot2::scale_x_continuous(breaks = breaks, expand = c(0, 0.01, 0, 0)) +
       ggplot2::scale_y_continuous(limits = c(0, length(groups)), expand = c(0, 0, 0, 0))
 
