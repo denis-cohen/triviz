@@ -51,7 +51,7 @@ build_plot_point_estimates <-
         plot.margin = grid::unit(c(1, 0, 1, 1), "cm")
       ) +
       ggplot2::xlab("Expected Values\n") +
-      ggplot2::scale_x_continuous(breaks = breaks, expand = c(0, 0.01, 0, 0)) +
+      ggplot2::scale_x_continuous(breaks = breaks, expand = c(0, 0.05, 0, 0)) +
       ggplot2::scale_y_continuous(limits = c(0, length(groups)), expand = c(0, 0, 0, 0))
 
     # Draw basic layout of left part of the plot
