@@ -295,10 +295,7 @@ build_plot_point_estimates <-
           type = color_palette,
           "",
           limits = c(0, 1),
-          breaks = seq(0, 1, by = 0.25),
-          guide = ggplot2::guide_legend(title = p_val_type,
-                                        title.position = "top",
-                                        keyheight = 1)
+          breaks = seq(0, 1, by = 0.25)
         )
     } else {
       boxes <- boxes +
@@ -307,24 +304,23 @@ build_plot_point_estimates <-
           trans = 'reverse',
           "",
           limits = c(1, 0),
-          breaks = seq(0, 1, by = 0.25),
-          guide = ggplot2::guide_legend(title = p_val_type,
-                                        title.position = "top",
-                                        keyheight = 1)
+          breaks = seq(0, 1, by = 0.25)
         )
     }
+
+    panel_height <- grid::unit(1,"npc") - sum(ggplot2::ggplotGrob(boxes)[["heights"]][-3]) - grid::unit(4,"cm")
+    boxes <- boxes + ggplot2::guides(fill = ggplot2::guide_colorbar(barheight=panel_height,
+                                                                    title = p_val_type,
+                                                                    ))
 
     plot_ci_combined <- cowplot::plot_grid(plot_ci,
                                            boxes +
                                              ggplot2::theme(legend.position = "none"),
                                            cowplot::get_legend(
                                              boxes +
-                                               ggplot2::theme(legend.key.height = grid::unit(2, 'cm'),
-                                                              legend.text = ggplot2::element_text(size = 7))),
-                                           #labels = c('', '', p_val_type),
-                                           #label_fontface = "bold",
-                                           #label_size = 7,
-                                           #label_x = 0.1, label_y = 0, vjust = -8,
+                                               ggplot2::theme(legend.title=ggplot2::element_text(size=7,
+                                                                                                 face = "bold"),
+                                                     legend.text=ggplot2::element_text(size=7))),
                                            rel_widths = c(0.45, 0.45, 0.1),
                                            nrow = 1,
                                            ncol = 3)
