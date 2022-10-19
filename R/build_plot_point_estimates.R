@@ -17,6 +17,7 @@ build_plot_point_estimates <-
            p_val_type,
            p_bars) {
     # Initialize ggplot object with scales
+
     n_ticks <- 5
     breaks <- labeling::extended(
       m = n_ticks,
@@ -50,7 +51,7 @@ build_plot_point_estimates <-
         plot.margin = grid::unit(c(1, 0, 1, 1), "cm")
       ) +
       ggplot2::coord_fixed(ratio = ratio, clip = "off") +
-      ggplot2::scale_x_continuous(breaks = breaks, expand = c(0, 0.01, 0, 0)) +
+      ggplot2::scale_x_continuous(breaks = breaks, expand = c(0, 0.00, 0, 0)) +
       ggplot2::scale_y_continuous(limits = c(0, length(groups)), expand = c(0, 0, 0, 0))
 
     # Define axis descriptions
@@ -65,6 +66,7 @@ build_plot_point_estimates <-
         size = 2.5,
         x = (x_min + x_max) / 2,
         y = 0,
+        fontface = "bold",
         vjust = grid::unit(4, "cm")
       ) +
       ggplot2::geom_text(
@@ -75,6 +77,7 @@ build_plot_point_estimates <-
           groups
         ) - 1) * ratio)) / 2,
         y = 0,
+        fontface = "bold",
         vjust = grid::unit(2, "cm"))
 
     # Draw basic layout of left part of the plot
@@ -164,7 +167,7 @@ build_plot_point_estimates <-
             ggplot2::geom_segment(
               data = data,
               ggplot2::aes(
-                x = x * ratio + abs(x_max),,
+                x = x * ratio + abs(x_max),
                 y = length(contrasts[1, 1, ]) - y + .5,
                 xend = (x + 0.5) * ratio +
                   abs(x_max),
@@ -310,10 +313,8 @@ build_plot_point_estimates <-
         )
     }
 
-    panel_height <- grid::unit(1,"npc") - sum(ggplot2::ggplotGrob(plot_ci)[["heights"]][-3]) - grid::unit(4,"cm")
-    plot_ci <- plot_ci + ggplot2::guides(fill = ggplot2::guide_colorbar(barheight=panel_height,
-                                                                    title = p_val_type,
-                                                                    )) +
+    plot_ci <- plot_ci +
+      ggplot2::guides(fill = ggplot2::guide_colorbar(title = p_val_type)) +
       ggplot2::theme(legend.title=ggplot2::element_text(size=7, face = "bold"),
                      legend.text=ggplot2::element_text(size=7))
 
