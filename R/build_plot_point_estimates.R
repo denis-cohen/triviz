@@ -51,7 +51,7 @@ build_plot_point_estimates <-
         plot.margin = grid::unit(c(1, 0, 1, 1), "cm")
       ) +
       ggplot2::coord_fixed(ratio = ratio, clip = "off") +
-      ggplot2::scale_x_continuous(breaks = breaks, expand = c(0, 0.00, 0, 0)) +
+      ggplot2::scale_x_continuous(breaks = breaks, expand = c(0, 0, 0, 0)) +
       ggplot2::scale_y_continuous(limits = c(0, length(groups)), expand = c(0, 0, 0, 0))
 
     # Define axis descriptions
@@ -292,7 +292,7 @@ build_plot_point_estimates <-
     plot_ci <- plot_ci +
       ggplot2::geom_col(data = ev,
                         width = 0,
-                        ggplot2::aes(fill = p, x = 0, y = p))
+                        ggplot2::aes(fill = p, x = x_min, y = p))
 
     if (type == "bayesian") {
       plot_ci <- plot_ci +
