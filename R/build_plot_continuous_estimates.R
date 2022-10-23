@@ -94,11 +94,7 @@ build_plot_continuous_estimates <-
         size = 0.5
       ),
       panel.grid.minor.x = ggplot2::element_blank(),
-      plot.margin = grid::unit(c(1, 0, 1, 1), "cm"),
-      legend.key.width = grid::unit(0.25, "cm"),
-      legend.margin = ggplot2::margin(c(0, .5, 0, .5), unit = 'cm'),
-      legend.key.height = grid::unit(max_y_range * length(unique(ev$Group)), "line"),
-      legend.text = ggplot2::element_text(size = 7)
+      plot.margin = grid::unit(c(1, 0, 1, 1), "cm")
     ) +
       ggplot2::scale_x_continuous(
         expand = c(0, .001),
@@ -121,7 +117,6 @@ build_plot_continuous_estimates <-
     caption_exp <- data.frame(exp_val = c(variable_label))
     caption_stat <-
       data.frame(stat = c("Statistical Significances of\nPairwise Differences"))
-    caption_pval <- data.frame(pval = c(p_val_type))
 
     # Write axis labels
     plot_ci <- plot_ci +
@@ -139,16 +134,6 @@ build_plot_continuous_estimates <-
         x = (x_max + (x_max + ((length(unique(ev$Group)) - 1) * max_y_range * ratio
         ))) / 2,
         y = -max_y_range / n_ticks_y
-      ) +
-      ggplot2::geom_text(
-        data = caption_pval,
-        ggplot2::aes(label = pval),
-        size = 2.5,
-        x = (x_max + ((
-          length(unique(ev$Group)) - 1
-        ) * max_y_range * ratio)),
-        y = -max_y_range / n_ticks_y,
-        hjust = grid::unit(-1.0, "cm")
       )
 
     # Draw basic layout of left part of the plot
@@ -164,7 +149,7 @@ build_plot_continuous_estimates <-
         fill = NA
       ) +
       ggplot2::geom_text(
-        x = x_min - (abs(x_max) - abs(x_min)) / n_ticks_y,
+        x = x_min - (abs(x_max) - abs(x_min)) / length(breaks_x),
         y = groups_y_range - max_y_range * .5,
         vjust = "center",
         hjust = "middle",
@@ -373,7 +358,7 @@ build_plot_continuous_estimates <-
 
 
     plot_ci <- plot_ci +
-      ggplot2::geom_col(data = ev, ggplot2::aes(fill = p, x = 0, y = 0))
+      ggplot2::geom_col(data = ev, ggplot2::aes(fill = p, x = x_min, y = 0))
 
     if (!one_tailed_test) {
       if (type == "bayesian") {
@@ -404,6 +389,11 @@ build_plot_continuous_estimates <-
           trans = 'reverse'
         )
     }
+
+    plot_ci <- plot_ci +
+      ggplot2::guides(fill = ggplot2::guide_colorbar(title = p_val_type)) +
+      ggplot2::theme(legend.title=ggplot2::element_text(size=7, face = "bold"),
+                     legend.text=ggplot2::element_text(size=7))
 
     return(plot_ci)
   }
