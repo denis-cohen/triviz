@@ -95,7 +95,7 @@ build_plot_point_estimates <-
       ) +
       ggplot2::geom_text(
         ggplot2::aes(
-          x = x_min - (breaks[2] - breaks[1]) / 10,
+          x = x_min - (breaks[2] - breaks[1]) / length(breaks),
           y = groups - .5,
           label = ev$Group
         ),
