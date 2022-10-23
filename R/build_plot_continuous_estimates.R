@@ -149,7 +149,7 @@ build_plot_continuous_estimates <-
         fill = NA
       ) +
       ggplot2::geom_text(
-        x = x_min - (abs(x_max) - abs(x_min)) / length(breaks_x),
+        x = x_min - (abs(x_max) - abs(x_min)) / .5 * length(breaks_x),
         y = groups_y_range - max_y_range * .5,
         vjust = "center",
         hjust = "middle",
