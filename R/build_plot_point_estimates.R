@@ -17,6 +17,7 @@ build_plot_point_estimates <-
            p_val_type,
            p_bars) {
     # Initialize ggplot object with scales
+
     n_ticks <- 5
     breaks <- labeling::extended(
       m = n_ticks,
@@ -46,26 +47,38 @@ build_plot_point_estimates <-
           size = 0.5
         ),
         panel.grid.minor.x = ggplot2::element_blank(),
-        panel.spacing = grid::unit(c(1, 0, 1, 1), "cm"),
-        plot.margin = grid::unit(c(1, 0, 1, 1), "cm"),
-        legend.box.margin = ggplot2::margin(0, 0, 0, 0),
-        legend.key.width = grid::unit(0.25, "cm"),
-        legend.key.height = grid::unit(length(groups) * .25, "cm"),
-        legend.margin = ggplot2::margin(c(0, .5, 0, 0), unit =
-                                          'cm'),
-        legend.text = ggplot2::element_text(size =
-                                              7)
+        panel.spacing = grid::unit(c(1, 0, 1, 0), "cm"),
+        plot.margin = grid::unit(c(1, 0, 1, 1), "cm")
       ) +
-      ggplot2::scale_x_continuous(breaks = breaks, expand = c(0, 0)) +
       ggplot2::coord_fixed(ratio = ratio, clip = "off") +
-      ggplot2::scale_y_continuous(limits = c(0, length(groups)), expand = c(0, 0))
-
+      ggplot2::scale_x_continuous(breaks = breaks, expand = c(0, 0, 0, 0)) +
+      ggplot2::scale_y_continuous(limits = c(0, length(groups)), expand = c(0, 0, 0, 0))
 
     # Define axis descriptions
     caption_exp <- data.frame(exp_val = c("Expected Values"))
     caption_stat <-
       data.frame(stat = c("Statistical Significance of\nPairwise Differences"))
-    caption_pval <- data.frame(pval = c(p_val_type))
+
+    plot_ci <- plot_ci +
+      ggplot2::geom_text(
+        data = caption_exp,
+        ggplot2::aes(label = exp_val),
+        size = 2.5,
+        x = (x_min + x_max) / 2,
+        y = 0,
+        fontface = "bold",
+        vjust = grid::unit(4, "cm")
+      ) +
+      ggplot2::geom_text(
+        data = caption_stat,
+        ggplot2::aes(label = stat),
+        size = 2.5,
+        x = (x_max + (x_max + (length(
+          groups
+        ) - 1) * ratio)) / 2,
+        y = 0,
+        fontface = "bold",
+        vjust = grid::unit(2, "cm"))
 
     # Draw basic layout of left part of the plot
     plot_ci <- plot_ci +
@@ -82,7 +95,7 @@ build_plot_point_estimates <-
       ) +
       ggplot2::geom_text(
         ggplot2::aes(
-          x = x_min - .1 * ratio,
+          x = x_min - (breaks[2] - breaks[1]) / length(breaks),
           y = groups - .5,
           label = ev$Group
         ),
@@ -100,42 +113,8 @@ build_plot_point_estimates <-
         yend = groups - .5
       ))
 
-    # Write axis labels
-    plot_ci <- plot_ci +
-      ggplot2::geom_text(
-        data = caption_exp,
-        ggplot2::aes(label = exp_val),
-        size = 2.5,
-        x = (x_min + x_max) / 2,
-        y = 0,
-        vjust = grid::unit(4, "cm")
-      ) +
-      ggplot2::geom_text(
-        data = caption_stat,
-        ggplot2::aes(label = stat),
-        size = 2.5,
-        x = (x_max + (x_max + (length(
-          groups
-        ) - 1) * ratio)) / 2,
-        y = 0,
-        vjust = grid::unit(2, "cm")
-      ) +
-      ggplot2::geom_text(
-        data = caption_pval,
-        ggplot2::aes(label = pval),
-        size = 2.5,
-        x = (x_max + (length(groups) - 1) * ratio),
-        y = 0,
-        vjust = grid::unit(4, "cm"),
-        hjust = grid::unit(-0.5, "cm")
-      )
-
     # Draw first differences with Confidence Intervals
-    rows <-
-      if (is.null(nrow(contrasts[, , 1])))
-        1
-    else
-      nrow(contrasts[, , 1])
+    rows <- ifelse((is.null(nrow(contrasts[, , 1]))), 1, nrow(contrasts[, , 1]))
     for (i in 1:length(contrasts[1, 1, ])) {
       for (j in rows:1) {
         data <- cbind.data.frame(
@@ -167,7 +146,7 @@ build_plot_point_estimates <-
               ggplot2::aes(
                 x = (x + 0.5) * ratio + x_max,
                 y = length(contrasts[1, 1, ]) - y + .5,
-                xend = (x + 0.5) * ratio +
+                xend =  (x + 0.5) * ratio +
                   abs(x_max),
                 yend = length(contrasts[1, 1, ]) - y
               ),
@@ -238,8 +217,7 @@ build_plot_point_estimates <-
                 ggplot2::aes(
                   pattern = hatched,
                   fill = p_val,
-                  xmin = x * ratio +
-                    abs(x_max),
+                  xmin = x * ratio + abs(x_max),
                   xmax = (x + 1) * ratio +
                     abs(x_max),
                   ymin = length(contrasts[1, 1, ]) -
@@ -255,6 +233,7 @@ build_plot_point_estimates <-
               ) +
               ggplot2::guides(pattern = "none")
           }
+
           plot_ci <- plot_ci +
             ggplot2::geom_rect(
               data = data,
@@ -262,13 +241,13 @@ build_plot_point_estimates <-
                 xmin = x * ratio + abs(x_max),
                 xmax = (x + 1) * ratio +
                   abs(x_max),
-                ymin = length(contrasts[1, 1, ]) -
+                ymin = length(contrasts[1, 1,]) -
                   y,
-                ymax = length(contrasts[1, 1, ]) -
+                ymax = length(contrasts[1, 1,]) -
                   y - 1,
-                colour = "black"
-              ),
-              alpha = 0.01
+                color = "black",
+                alpha = 0.01
+              )
             )
         }
       }
@@ -278,7 +257,7 @@ build_plot_point_estimates <-
     plot_ci <- plot_ci +
       ggplot2::geom_col(data = ev,
                         width = 0,
-                        ggplot2::aes(fill = p, x = 0, y = p))
+                        ggplot2::aes(fill = p, x = x_min, y = p))
 
     if (type == "bayesian") {
       plot_ci <- plot_ci +
@@ -298,6 +277,11 @@ build_plot_point_estimates <-
           breaks = seq(0, 1, by = 0.25)
         )
     }
+
+    plot_ci <- plot_ci +
+      ggplot2::guides(fill = ggplot2::guide_colorbar(title = p_val_type)) +
+      ggplot2::theme(legend.title=ggplot2::element_text(size=7, face = "bold"),
+                     legend.text=ggplot2::element_text(size=7))
 
     return(plot_ci)
   }
