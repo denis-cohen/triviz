@@ -65,7 +65,7 @@ ui <- shiny::fluidPage(
 
 server <- function(input, output, session) {
   plot_ci <-
-    triviz:::build_plot_continuous_estimates(
+    triviz:::build_plot_continuous_estimates_interactive(
       ev,
       variable,
       type,

@@ -148,7 +148,40 @@ build_plot_point_estimates <-
                              contrasts[j, , i]["p"] > 1 - p_val_threshold,
                              contrasts[j, , i]["p"] < p_val_threshold
                            ),
-                           FALSE)
+                           FALSE),
+          tooltip = paste0(
+            "<i>Click on tile to see ",
+            ifelse(type == "bayesian", "posterior", "sampling"),
+            " distribution.</i>\n",
+            "First Difference: ",
+            ev[j + 1, ]$Group,
+            " - ",
+            ev[i, ]$Group,
+            "\n Estimate: ",
+            format(
+              round(contrasts[j, , i]["FD"], 2),
+              nsmall = 2,
+              scientific = F
+            ),
+            paste0("\n ", round(100 * (1 - p_val_threshold), 1), "%-Interval: ["),
+            format(
+              round(contrasts[j, , i]["lower"], 2),
+              nsmall = 2,
+              scientific = F
+            ),
+            ";",
+            format(
+              round(contrasts[j, , i]["upper"], 2),
+              nsmall = 2,
+              scientific = F
+            ),
+            paste0("] \n ", p_val_type, ": "),
+            format(
+              round(contrasts[j, , i]["p"], 2),
+              nsmall = 2,
+              scientific = F
+            )
+          )
         )
         if (i == j) {
           plot_ci <- plot_ci +
@@ -221,7 +254,7 @@ build_plot_point_estimates <-
                 )
             }
 
-            # Draw p-value box
+            # Draw p-value box (with interactive tooltip)
             plot_ci <- plot_ci +
               ggplot2::annotation_custom(
                 grob = ggplot2::ggplotGrob(p_val_plot),
@@ -256,7 +289,7 @@ build_plot_point_estimates <-
               ggplot2::guides(pattern = "none")
           }
           plot_ci <- plot_ci +
-            ggplot2::geom_rect(
+            ggiraph::geom_rect_interactive(
               data = data,
               ggplot2::aes(
                 xmin = x * ratio + abs(x_max),
@@ -266,7 +299,9 @@ build_plot_point_estimates <-
                   y,
                 ymax = length(contrasts[1, 1, ]) -
                   y - 1,
-                colour = "black"
+                data_id = paste0(x, "_", y, "_fd"),
+                colour = "black",
+                tooltip = tooltip
               ),
               alpha = 0.01
             )

@@ -94,34 +94,34 @@ plot_continuous_estimates <- function(estimates,
         p_val_type = p_val_type
       )
     return(plot_ci)
+  } else {
+    shiny::shinyOptions(
+      ev = estimates$expected_values,
+      variable = variable,
+      type = type,
+      variable_label = ifelse(!is.na(variable_label),
+                              variable_label,
+                              variable),
+      contrasts = estimates$contrasts,
+      y_min = min(estimates$expected_values$lower),
+      y_max = max(estimates$expected_values$upper),
+      x_min = min(estimates$expected_values[, variable]),
+      x_max = max(estimates$expected_values[, variable]),
+      round_dec = round_dec,
+      color_palette = color_palette,
+      one_tailed_test = one_tailed_test,
+      p_val_threshold = p_val_threshold,
+      p_val_type = p_val_type
+    )
+
+    # Look for shiny app directory
+    appDir <-
+      system.file("shiny", "shiny_linear_predictions", package = "triviz")
+    if (appDir == "") {
+      stop("Could not find shiny directory. Try re-installing `triviz`.",
+           call. = FALSE)
+    }
+
+    shiny::runApp(appDir)
   }
-
-  shiny::shinyOptions(
-    ev = estimates$expected_values,
-    variable = variable,
-    type = type,
-    variable_label = ifelse(!is.na(variable_label),
-                            variable_label,
-                            variable),
-    contrasts = estimates$contrasts,
-    y_min = min(estimates$expected_values$lower),
-    y_max = max(estimates$expected_values$upper),
-    x_min = min(estimates$expected_values[, variable]),
-    x_max = max(estimates$expected_values[, variable]),
-    round_dec = round_dec,
-    color_palette = color_palette,
-    one_tailed_test = one_tailed_test,
-    p_val_threshold = p_val_threshold,
-    p_val_type = p_val_type
-  )
-
-  # Look for shiny app directory
-  appDir <-
-    system.file("shiny", "shiny_linear_predictions", package = "triviz")
-  if (appDir == "") {
-    stop("Could not find shiny directory. Try re-installing `triviz`.",
-         call. = FALSE)
-  }
-
-  shiny::runApp(appDir)
 }

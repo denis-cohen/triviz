@@ -106,7 +106,7 @@ ui <- shiny::fluidPage(
 
 server <- function(input, output, session) {
   plot_ci <-
-    triviz:::build_plot_point_estimates(
+    triviz:::build_plot_point_estimates_interactive(
       ev,
       contrasts,
       type,

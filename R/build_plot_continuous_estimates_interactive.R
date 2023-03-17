@@ -1,4 +1,4 @@
-#' @title build_plot_continuous_estimates
+#' @title build_plot_continuous_estimates_interactive
 #'
 #' @description Internal function
 #'
@@ -257,7 +257,14 @@ build_plot_continuous_estimates <-
             x = group1 - 1,
             y = max_y_range * (length(unique_groups) - group2),
             group1 = unique_groups[group1],
-            group2 = unique_groups[group2]
+            group2 = unique_groups[group2],
+            tooltip = paste0(
+              "<i>Click on tile to see first differences.</i>\n",
+              "First Difference: ",
+              unique_groups[group1],
+              " - ",
+              unique_groups[group2]
+            )
           )
           filtered_group_pval <- filtered_group %>%
             filter(Group2 == unique_groups[group2]) %>%
@@ -337,7 +344,7 @@ build_plot_continuous_estimates <-
               legend.position = "none"
             )
 
-          # Draw p-value box
+          # Draw p-value box (with interactive tooltip)
           plot_ci <- plot_ci +
             ggplot2::annotation_custom(
               grob = ggplot2::ggplotGrob(p_val_plot),
@@ -346,7 +353,7 @@ build_plot_continuous_estimates <-
               ymin = data$y,
               ymax = data$y + max_y_range
             ) +
-            ggplot2::geom_rect(
+            ggiraph::geom_rect_interactive(
               data = data,
               ggplot2::aes(
                 xmin = x * ratio_y_range + x_max,
@@ -354,7 +361,9 @@ build_plot_continuous_estimates <-
                   ratio_y_range + x_max,
                 ymin = y,
                 ymax = y + max_y_range,
-                colour = "black"
+                data_id = paste0(group1, "+", group2, "_fd"),
+                colour = "black",
+                tooltip = tooltip
               ),
               alpha = 0.01
             )

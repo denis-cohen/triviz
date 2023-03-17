@@ -33,7 +33,6 @@ plot_point_estimates <- function(estimates,
                                  p_val_threshold = 0.05,
                                  p_val_type = "p-value",
                                  interactive = FALSE) {
-
   ## Warnings
   if (missing(estimates)) {
     stop("Please pass a triviz_estimates object to `estimates`.")
@@ -50,9 +49,7 @@ plot_point_estimates <- function(estimates,
     one_tailed_test <- !estimates$twotailed
   } else {
     ## Integrity checks for non-triviz objects)
-    if (!(all(
-      c("expected_values", "contrasts") %in% names(estimates)
-    ))) {
+    if (!(all(c("expected_values", "contrasts") %in% names(estimates)))) {
       stop(
         paste(
           "Analytical list must include the members",
@@ -86,9 +83,7 @@ plot_point_estimates <- function(estimates,
   }
 
   span <-
-    abs(
-      max(estimates$expected_values$lower) - min(estimates$expected_values$lower)
-    )
+    abs(max(estimates$expected_values$lower) - min(estimates$expected_values$lower))
   if (!interactive) {
     plot_ci <-
       build_plot_point_estimates(
@@ -107,51 +102,51 @@ plot_point_estimates <- function(estimates,
         p_bars = p_bars
       )
     return(plot_ci)
-  }
-
-  if (type == "analytical") {
-    shiny::shinyOptions(
-      ev = estimates$expected_values,
-      contrasts = estimates$contrasts,
-      type = type,
-      groups = rev(seq(
-        1, nrow(estimates$expected_values), 1
-      )),
-      round_dec = round_dec,
-      x_min = min(estimates$expected_values$lower) - 0.1 * span,
-      x_max = max(estimates$expected_values$upper) + 0.1 * span,
-      color_palette = color_palette,
-      p_val_threshold = p_val_threshold,
-      p_val_type = p_val_type,
-      p_bars = p_bars
-    )
   } else {
-    shiny::shinyOptions(
-      ev = estimates$expected_values,
-      contrasts = estimates$contrasts,
-      type = type,
-      ev_draws = estimates$expected_values_draws,
-      contrasts_draws = estimates$contrasts_draws,
-      groups = rev(seq(
-        1, nrow(estimates$expected_values), 1
-      )),
-      round_dec = round_dec,
-      x_min = min(estimates$expected_values$lower) - 0.1 * span,
-      x_max = max(estimates$expected_values$upper) + 0.1 * span,
-      color_palette = color_palette,
-      p_val_threshold = p_val_threshold,
-      p_val_type = p_val_type,
-      p_bars = p_bars
-    )
-  }
+    if (type == "analytical") {
+      shiny::shinyOptions(
+        ev = estimates$expected_values,
+        contrasts = estimates$contrasts,
+        type = type,
+        groups = rev(seq(
+          1, nrow(estimates$expected_values), 1
+        )),
+        round_dec = round_dec,
+        x_min = min(estimates$expected_values$lower) - 0.1 * span,
+        x_max = max(estimates$expected_values$upper) + 0.1 * span,
+        color_palette = color_palette,
+        p_val_threshold = p_val_threshold,
+        p_val_type = p_val_type,
+        p_bars = p_bars
+      )
+    } else {
+      shiny::shinyOptions(
+        ev = estimates$expected_values,
+        contrasts = estimates$contrasts,
+        type = type,
+        ev_draws = estimates$expected_values_draws,
+        contrasts_draws = estimates$contrasts_draws,
+        groups = rev(seq(
+          1, nrow(estimates$expected_values), 1
+        )),
+        round_dec = round_dec,
+        x_min = min(estimates$expected_values$lower) - 0.1 * span,
+        x_max = max(estimates$expected_values$upper) + 0.1 * span,
+        color_palette = color_palette,
+        p_val_threshold = p_val_threshold,
+        p_val_type = p_val_type,
+        p_bars = p_bars
+      )
+    }
 
-  # Look for shiny app directory
-  appDir <-
-    system.file("shiny", "shiny_point_estimate", package = "triviz")
-  if (appDir == "") {
-    stop("Could not find shiny directory. Try re-installing `triviz`.",
-         call. = FALSE)
-  }
+    # Look for shiny app directory
+    appDir <-
+      system.file("shiny", "shiny_point_estimate", package = "triviz")
+    if (appDir == "") {
+      stop("Could not find shiny directory. Try re-installing `triviz`.",
+           call. = FALSE)
+    }
 
-  shiny::runApp(appDir)
+    shiny::runApp(appDir)
+  }
 }
