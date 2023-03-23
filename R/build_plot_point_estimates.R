@@ -17,7 +17,6 @@ build_plot_point_estimates <-
            p_val_type,
            p_bars) {
     # Initialize ggplot object with scales
-
     n_ticks <- 5
     breaks <- labeling::extended(
       m = n_ticks,
@@ -78,7 +77,8 @@ build_plot_point_estimates <-
         ) - 1) * ratio)) / 2,
         y = 0,
         fontface = "bold",
-        vjust = grid::unit(2, "cm"))
+        vjust = grid::unit(2, "cm")
+      )
 
     # Draw basic layout of left part of the plot
     plot_ci <- plot_ci +
@@ -114,143 +114,135 @@ build_plot_point_estimates <-
       ))
 
     # Draw first differences with Confidence Intervals
-    rows <- ifelse((is.null(nrow(contrasts[, , 1]))), 1, nrow(contrasts[, , 1]))
+    rows <-
+      ifelse((is.null(nrow(contrasts[, , 1]))), 1, nrow(contrasts[, , 1]))
+    data <- NULL
     for (i in 1:length(contrasts[1, 1, ])) {
       for (j in rows:1) {
-        data <- cbind.data.frame(
-          x = i - 1,
-          y = j,
-          p_val = contrasts[j, , i]["p"],
-          hatched = ifelse(!is.na(p_val_threshold),
-                           ifelse(
-                             type == "bayesian",
-                             contrasts[j, , i]["p"] > 1 - p_val_threshold,
-                             contrasts[j, , i]["p"] < p_val_threshold
-                           ),
-                           FALSE)
-        )
-        # if (i == j) {
-        #   plot_ci <- plot_ci +
-        #     ggplot2::geom_segment(
-        #       data = data,
-        #       ggplot2::aes(
-        #         x = x * ratio + abs(x_max),
-        #         y = length(contrasts[1, 1, ]) - y + .5,
-        #         xend = (x + 0.5) * ratio +
-        #           abs(x_max),
-        #         yend = length(contrasts[1, 1, ]) - y + .5
-        #       )
-        #     ) +
-        #     ggplot2::geom_segment(
-        #       data = data,
-        #       ggplot2::aes(
-        #         x = (x + 0.5) * ratio + x_max,
-        #         y = length(contrasts[1, 1, ]) - y + .5,
-        #         xend =  (x + 0.5) * ratio +
-        #           abs(x_max),
-        #         yend = length(contrasts[1, 1, ]) - y
-        #       ),
-        #       arrow = ggplot2::arrow(length = grid::unit(0.25, "cm"))
-        #     )
-        # }
         if (i <= j) {
-          if (p_bars) {
-            p_val_plot <-
-              ggplot2::ggplot(data, ggplot2::aes_string(x = 0, "p_val")) +
-              ggplot2::geom_col(width = 0.25, ggplot2::aes(fill = p_val)) +
-              ggplot2::scale_x_continuous(expand = c(0, 0)) +
-              ggplot2::scale_y_continuous(expand = c(0, 0), limits = c(0, 1)) +
-              ggplot2::theme(
-                axis.text = ggplot2::element_blank(),
-                axis.ticks = ggplot2::element_blank(),
-                axis.title = ggplot2::element_blank(),
-                panel.grid = ggplot2::element_blank(),
-                panel.background = ggplot2::element_blank(),
-                panel.border = ggplot2::element_blank(),
-                axis.ticks.length = grid::unit(0, "pt"),
-                plot.margin = grid::unit(c(0, 0, 0, 0), "cm"),
-                panel.spacing = grid::unit(c(0, 0, 0, 0), "cm"),
-                legend.position = "none"
-              )
-            if (type == "bayesian") {
-              p_val_plot <- p_val_plot +
-                ggplot2::scale_fill_continuous(type = color_palette,
-                                               "",
-                                               limits = c(0, 1))
-            } else {
-              p_val_plot <- p_val_plot +
-                ggplot2::scale_fill_continuous(
-                  type = color_palette,
-                  trans = "reverse",
-                  "",
-                  limits = c(1, 0)
-                )
-            }
-
-            if (!is.na(p_val_threshold)) {
-              p_val_plot <- p_val_plot +
-                ggplot2::geom_hline(
-                  yintercept = ifelse(
-                    type == "bayesian",
-                    1 - p_val_threshold,
-                    p_val_threshold
-                  ),
-                  size = .5,
-                  color = "red"
-                )
-            }
-
-            # Draw p-value box
-            plot_ci <- plot_ci +
-              ggplot2::annotation_custom(
-                grob = ggplot2::ggplotGrob(p_val_plot),
-                xmin = data$x * ratio + abs(x_max),
-                xmax = (data$x + 1) * ratio + abs(x_max),
-                ymin = length(contrasts[1, 1, ]) - data$y,
-                ymax = length(contrasts[1, 1, ]) - data$y - 1
-              )
-          } else {
-            # Draw patterns and rectangles (right part)
-            plot_ci <- plot_ci +
-              ggpattern::geom_rect_pattern(
-                data = data,
-                ggplot2::aes(
-                  pattern = hatched,
-                  fill = p_val,
-                  xmin = x * ratio + abs(x_max),
-                  xmax = (x + 1) * ratio +
-                    abs(x_max),
-                  ymin = length(contrasts[1, 1, ]) -
-                    y,
-                  ymax = length(contrasts[1, 1, ]) -
-                    y - 1
+          data <- rbind.data.frame(
+            data,
+            cbind.data.frame(
+              i = i,
+              j = j,
+              x = i - 1,
+              y = j,
+              p_val = contrasts[j, , i]["p"],
+              hatched = ifelse(
+                !is.na(p_val_threshold),
+                ifelse(
+                  type == "bayesian",
+                  contrasts[j, , i]["p"] > 1 - p_val_threshold,
+                  contrasts[j, , i]["p"] < p_val_threshold
                 ),
-                pattern_colour = "gray35",
-                pattern_fill = "white",
-                pattern_angle = 45,
-                pattern_density = 0.005,
-                pattern_spacing = 0.02
-              ) +
-              ggplot2::guides(pattern = "none")
-          }
-
-          # plot_ci <- plot_ci +
-          #   ggplot2::geom_rect(
-          #     data = data,
-          #     ggplot2::aes(
-          #       xmin = x * ratio + abs(x_max),
-          #       xmax = (x + 1) * ratio +
-          #         abs(x_max),
-          #       ymin = length(contrasts[1, 1,]) -
-          #         y,
-          #       ymax = length(contrasts[1, 1,]) -
-          #         y - 1,
-          #       color = "black",
-          #       alpha = 0.01
-          #     )
-          #   )
+                FALSE
+              )
+            )
+          )
         }
       }
+    }
+
+    # ## Guiding arrows
+    # plot_ci <- plot_ci +
+    #   ggplot2::geom_segment(
+    #     data = data %>%
+    #       dplyr::filter(i == j),
+    #     ggplot2::aes(
+    #       x = x * ratio + abs(x_max),
+    #       y = length(contrasts[1, 1,]) - y + .5,
+    #       xend = (x + 0.5) * ratio +
+    #         abs(x_max),
+    #       yend = length(contrasts[1, 1,]) - y + .5
+    #     )
+    #   ) +
+    #   ggplot2::geom_segment(
+    #     data = data,
+    #     ggplot2::aes(
+    #       x = (x + 0.5) * ratio + x_max,
+    #       y = length(contrasts[1, 1,]) - y + .5,
+    #       xend =  (x + 0.5) * ratio +
+    #         abs(x_max),
+    #       yend = length(contrasts[1, 1,]) - y
+    #     ),
+    #     arrow = ggplot2::arrow(length = grid::unit(0.25, "cm"))
+    #   )
+
+    if (p_bars) {
+      p_val_plot <-
+        ggplot2::ggplot(data, ggplot2::aes_string(x = 0, "p_val")) +
+        ggplot2::geom_col(width = 0.25, ggplot2::aes(fill = p_val)) +
+        ggplot2::scale_x_continuous(expand = c(0, 0)) +
+        ggplot2::scale_y_continuous(expand = c(0, 0), limits = c(0, 1)) +
+        ggplot2::theme(
+          axis.text = ggplot2::element_blank(),
+          axis.ticks = ggplot2::element_blank(),
+          axis.title = ggplot2::element_blank(),
+          panel.grid = ggplot2::element_blank(),
+          panel.background = ggplot2::element_blank(),
+          panel.border = ggplot2::element_blank(),
+          axis.ticks.length = grid::unit(0, "pt"),
+          plot.margin = grid::unit(c(0, 0, 0, 0), "cm"),
+          panel.spacing = grid::unit(c(0, 0, 0, 0), "cm"),
+          legend.position = "none"
+        )
+      if (type == "bayesian") {
+        p_val_plot <- p_val_plot +
+          ggplot2::scale_fill_continuous(type = color_palette,
+                                         "",
+                                         limits = c(0, 1))
+      } else {
+        p_val_plot <- p_val_plot +
+          ggplot2::scale_fill_continuous(type = color_palette,
+                                         trans = "reverse",
+                                         "",
+                                         limits = c(1, 0))
+      }
+
+      if (!is.na(p_val_threshold)) {
+        p_val_plot <- p_val_plot +
+          ggplot2::geom_hline(
+            yintercept = ifelse(type == "bayesian",
+                                1 - p_val_threshold,
+                                p_val_threshold),
+            size = .5,
+            color = "red"
+          )
+      }
+
+      # Draw p-value box
+      plot_ci <- plot_ci +
+        ggplot2::annotation_custom(
+          grob = ggplot2::ggplotGrob(p_val_plot),
+          xmin = data$x * ratio + abs(x_max),
+          xmax = (data$x + 1) * ratio + abs(x_max),
+          ymin = length(contrasts[1, 1, ]) - data$y,
+          ymax = length(contrasts[1, 1, ]) - data$y - 1
+        )
+    } else {
+      # Draw patterns and rectangles (right part)
+      plot_ci <- plot_ci +
+        ggpattern::geom_rect_pattern(
+          data = data,
+          ggplot2::aes(
+            pattern = hatched,
+            fill = p_val,
+            xmin = x * ratio + abs(x_max),
+            xmax = (x + 1) * ratio +
+              abs(x_max),
+            ymin = length(contrasts[1, 1, ]) -
+              y,
+            ymax = length(contrasts[1, 1, ]) -
+              y - 1
+          ),
+          pattern_colour = "gray35",
+          pattern_fill = "white",
+          pattern_angle = 45,
+          pattern_density = 0.005,
+          pattern_spacing = 0.1 / rows,
+          color = "black"
+        ) +
+        ggplot2::guides(pattern = "none")
     }
 
     # Add legend with custom color
@@ -280,8 +272,10 @@ build_plot_point_estimates <-
 
     plot_ci <- plot_ci +
       ggplot2::guides(fill = ggplot2::guide_colorbar(title = p_val_type)) +
-      ggplot2::theme(legend.title=ggplot2::element_text(size=7, face = "bold"),
-                     legend.text=ggplot2::element_text(size=7))
+      ggplot2::theme(
+        legend.title = ggplot2::element_text(size = 7, face = "bold"),
+        legend.text = ggplot2::element_text(size = 7)
+      )
 
     return(plot_ci)
   }
