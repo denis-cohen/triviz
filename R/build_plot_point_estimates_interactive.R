@@ -4,7 +4,7 @@
 #'
 #' @noRd
 
-build_plot_point_estimates <-
+build_plot_point_estimates_interactive <-
   function(ev,
            contrasts,
            type,
