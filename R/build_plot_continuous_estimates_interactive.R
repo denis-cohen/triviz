@@ -4,7 +4,7 @@
 #'
 #' @noRd
 
-build_plot_continuous_estimates <-
+build_plot_continuous_estimates_interactive <-
   function(ev,
            variable,
            type,

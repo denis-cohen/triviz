@@ -1,4 +1,4 @@
-#' @title build_plot_point_estimates
+#' @title build_plot_point_estimates_interactive
 #'
 #' @description Internal function
 #'
