@@ -129,30 +129,30 @@ build_plot_point_estimates <-
                            ),
                            FALSE)
         )
-        if (i == j) {
-          plot_ci <- plot_ci +
-            ggplot2::geom_segment(
-              data = data,
-              ggplot2::aes(
-                x = x * ratio + abs(x_max),
-                y = length(contrasts[1, 1, ]) - y + .5,
-                xend = (x + 0.5) * ratio +
-                  abs(x_max),
-                yend = length(contrasts[1, 1, ]) - y + .5
-              )
-            ) +
-            ggplot2::geom_segment(
-              data = data,
-              ggplot2::aes(
-                x = (x + 0.5) * ratio + x_max,
-                y = length(contrasts[1, 1, ]) - y + .5,
-                xend =  (x + 0.5) * ratio +
-                  abs(x_max),
-                yend = length(contrasts[1, 1, ]) - y
-              ),
-              arrow = ggplot2::arrow(length = grid::unit(0.25, "cm"))
-            )
-        }
+        # if (i == j) {
+        #   plot_ci <- plot_ci +
+        #     ggplot2::geom_segment(
+        #       data = data,
+        #       ggplot2::aes(
+        #         x = x * ratio + abs(x_max),
+        #         y = length(contrasts[1, 1, ]) - y + .5,
+        #         xend = (x + 0.5) * ratio +
+        #           abs(x_max),
+        #         yend = length(contrasts[1, 1, ]) - y + .5
+        #       )
+        #     ) +
+        #     ggplot2::geom_segment(
+        #       data = data,
+        #       ggplot2::aes(
+        #         x = (x + 0.5) * ratio + x_max,
+        #         y = length(contrasts[1, 1, ]) - y + .5,
+        #         xend =  (x + 0.5) * ratio +
+        #           abs(x_max),
+        #         yend = length(contrasts[1, 1, ]) - y
+        #       ),
+        #       arrow = ggplot2::arrow(length = grid::unit(0.25, "cm"))
+        #     )
+        # }
         if (i <= j) {
           if (p_bars) {
             p_val_plot <-
@@ -210,7 +210,7 @@ build_plot_point_estimates <-
                 ymax = length(contrasts[1, 1, ]) - data$y - 1
               )
           } else {
-            # Draw Patterns and interactive rectangles (right part)
+            # Draw patterns and rectangles (right part)
             plot_ci <- plot_ci +
               ggpattern::geom_rect_pattern(
                 data = data,
@@ -234,21 +234,21 @@ build_plot_point_estimates <-
               ggplot2::guides(pattern = "none")
           }
 
-          plot_ci <- plot_ci +
-            ggplot2::geom_rect(
-              data = data,
-              ggplot2::aes(
-                xmin = x * ratio + abs(x_max),
-                xmax = (x + 1) * ratio +
-                  abs(x_max),
-                ymin = length(contrasts[1, 1,]) -
-                  y,
-                ymax = length(contrasts[1, 1,]) -
-                  y - 1,
-                color = "black",
-                alpha = 0.01
-              )
-            )
+          # plot_ci <- plot_ci +
+          #   ggplot2::geom_rect(
+          #     data = data,
+          #     ggplot2::aes(
+          #       xmin = x * ratio + abs(x_max),
+          #       xmax = (x + 1) * ratio +
+          #         abs(x_max),
+          #       ymin = length(contrasts[1, 1,]) -
+          #         y,
+          #       ymax = length(contrasts[1, 1,]) -
+          #         y - 1,
+          #       color = "black",
+          #       alpha = 0.01
+          #     )
+          #   )
         }
       }
     }
