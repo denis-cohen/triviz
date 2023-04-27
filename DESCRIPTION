@@ -4,8 +4,8 @@ Title: Triangular Visualizations for the Significance of Pairwise
     Differences in Multigroup Comparisons
 Version: 0.1.0
 Authors@R: c(
-    person("Denis", "Cohen", email = "denis.cohen@mzes.uni-mannheim.de", role = c("cre","aut")),
-    person("Andreas", "Küpfer", email = "akuepfer@mail.uni-mannheim.de", role = "aut"))
+    person("Denis", "Cohen", email = "denis.cohen@uni-mannheim.de", role = c("aut", "cre")),
+    person("Andreas", "Küpfer", email = "andreas.kuepfer@tu-darmstadt.de", role = "aut"))
 Description: The \code{triviz} package offers functions for
     plotting group-specific estimates along with information on the
     uncertainty about all of their pairwise differences. Next to

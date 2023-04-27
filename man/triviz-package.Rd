@@ -19,7 +19,7 @@ The 'triviz' package
 }
 \references{
 \enumerate{
-  \item Cohen, Denis (2022). Making sense of statistical significance
+  \item Cohen, Denis (2023). Making sense of statistical significance
   in multi-group comparisons using triangular visualizations.
   Unpublished manuscript.
 }
@@ -33,11 +33,11 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Denis Cohen \email{denis.cohen@mzes.uni-mannheim.de}
+\strong{Maintainer}: Denis Cohen \email{denis.cohen@uni-mannheim.de}
 
 Authors:
 \itemize{
-  \item Andreas Küpfer \email{akuepfer@mail.uni-mannheim.de}
+  \item Andreas Küpfer \email{andreas.kuepfer@tu-darmstadt.de}
 }
 
 }

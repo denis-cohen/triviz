@@ -17,7 +17,7 @@
 #'
 #' @references
 #' \enumerate{
-#'   \item Cohen, Denis (2022). Making sense of statistical significance
+#'   \item Cohen, Denis (2023). Making sense of statistical significance
 #'   in multi-group comparisons using triangular visualizations.
 #'   Unpublished manuscript.
 #' }

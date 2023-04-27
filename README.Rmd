@@ -1,8 +1,7 @@
 ---
 title: "triviz: Triangular Visualizations for the Significance of Pairwise Differences in Multigroup Comparisons"
-author: "Denis Cohen & Andreas Küpfer"
-date: "`r format(Sys.Date(), format='%B %d, %Y')`"
-output: rmarkdown::md_document
+author: "Denis Cohen and Andreas Küpfer"
+output: rmarkdown::github_document
 
 ---
 
