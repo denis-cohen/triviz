@@ -48,7 +48,7 @@ build_plot_point_estimates <-
         ),
         panel.grid.minor.x = ggplot2::element_blank(),
         panel.spacing = grid::unit(c(1, 0, 1, 0), "cm"),
-        plot.margin = grid::unit(c(1, 0, 1, 1), "cm")
+        plot.margin = grid::unit(c(1, 0, 1, 2), "cm")
       ) +
       ggplot2::coord_fixed(ratio = ratio, clip = "off") +
       ggplot2::scale_x_continuous(breaks = breaks, expand = c(0, 0, 0, 0)) +

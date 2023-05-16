@@ -48,7 +48,7 @@ build_plot_point_estimates_interactive <-
         ),
         panel.grid.minor.x = ggplot2::element_blank(),
         panel.spacing = grid::unit(c(1, 0, 1, 1), "cm"),
-        plot.margin = grid::unit(c(1, 0, 1, 1), "cm"),
+        plot.margin = grid::unit(c(1, 0, 1, 2), "cm"),
         legend.box.margin = ggplot2::margin(0, 0, 0, 0),
         legend.key.width = grid::unit(0.25, "cm"),
         legend.key.height = grid::unit(length(groups) * .25, "cm"),
@@ -105,7 +105,7 @@ build_plot_point_estimates_interactive <-
         data_id = ev$Group,
         colour = "black",
         tooltip = paste0(
-          "Expected value ",
+          "Expected value: ",
           ev$Group,
           "\n Estimate: ",
           format(
