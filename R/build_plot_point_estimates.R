@@ -29,7 +29,8 @@ build_plot_point_estimates <-
     ratio <- abs(x_max - x_min) / n_ticks
 
     plot_ci <-
-      ggplot2::ggplot() + ggplot2::theme(
+      ggplot2::ggplot() +
+      ggplot2::theme(
         axis.line.y = ggplot2::element_blank(),
         axis.text.y = ggplot2::element_blank(),
         axis.text.x = ggplot2::element_text(size =
@@ -101,7 +102,7 @@ build_plot_point_estimates <-
         ),
         size = 2,
         hjust = "center",
-        vjust = "middle",
+        vjust = 1,
         angle = 0,
         fontface = 'bold'
       ) +

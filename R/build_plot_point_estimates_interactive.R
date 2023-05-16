@@ -29,7 +29,8 @@ build_plot_point_estimates_interactive <-
     ratio <- abs(x_max - x_min) / n_ticks
 
     plot_ci <-
-      ggplot2::ggplot() + ggplot2::theme(
+      ggplot2::ggplot() +
+      ggplot2::theme(
         axis.line.y = ggplot2::element_blank(),
         axis.text.y = ggplot2::element_blank(),
         axis.text.x = ggplot2::element_text(size =
@@ -88,17 +89,47 @@ build_plot_point_estimates_interactive <-
         ),
         size = 2,
         hjust = "center",
-        vjust = "middle",
+        vjust = 1,
         angle = 0,
         fontface = 'bold'
       ) +
-      ggplot2::geom_point(ggplot2::aes(ev$EV, groups - .5), size = 1) +
       ggplot2::geom_segment(ggplot2::aes(
         x = ev$lower,
         xend = ev$upper,
         y = groups - .5,
         yend = groups - .5
-      ))
+      )) +
+      ggiraph::geom_point_interactive(
+        ggplot2::aes(ev$EV, groups - .5),
+        size = 1,
+        data_id = ev$Group,
+        colour = "black",
+        tooltip = paste0(
+          "Expected value ",
+          ev$Group,
+          "\n Estimate: ",
+          format(
+            round(ev$EV, 2),
+            nsmall = 2,
+            scientific = F
+          ),
+          paste0("\n ", round(100 * (
+            1 - p_val_threshold
+          ), 1), "%-Interval: ["),
+          format(
+            round(ev$lower, 2),
+            nsmall = 2,
+            scientific = F
+          ),
+          ";",
+          format(
+            round(ev$upper, 2),
+            nsmall = 2,
+            scientific = F
+          ),
+          paste0("]")
+        )
+      )
 
     # Write axis labels
     plot_ci <- plot_ci +
