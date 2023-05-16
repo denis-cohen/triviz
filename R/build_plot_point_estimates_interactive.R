@@ -88,8 +88,8 @@ build_plot_point_estimates_interactive <-
           label = ev$Group
         ),
         size = 2,
-        hjust = "center",
-        vjust = 1,
+        hjust = "right",
+        vjust = "middle",
         angle = 0,
         fontface = 'bold'
       ) +
@@ -101,7 +101,7 @@ build_plot_point_estimates_interactive <-
       )) +
       ggiraph::geom_point_interactive(
         ggplot2::aes(ev$EV, groups - .5),
-        size = 1,
+        size = 1.5,
         data_id = ev$Group,
         colour = "black",
         tooltip = paste0(

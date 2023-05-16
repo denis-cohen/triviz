@@ -101,8 +101,8 @@ build_plot_point_estimates <-
           label = ev$Group
         ),
         size = 2,
-        hjust = "center",
-        vjust = 1,
+        hjust = "right",
+        vjust = "middle",
         angle = 0,
         fontface = 'bold'
       ) +
