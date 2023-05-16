@@ -102,7 +102,7 @@ build_plot_point_estimates <-
         size = 2,
         hjust = "center",
         vjust = "middle",
-        angle = 90,
+        angle = 0,
         fontface = 'bold'
       ) +
       ggplot2::geom_point(ggplot2::aes(ev$EV, groups - .5), size = 1) +

@@ -89,7 +89,7 @@ build_plot_point_estimates_interactive <-
         size = 2,
         hjust = "center",
         vjust = "middle",
-        angle = 90,
+        angle = 0,
         fontface = 'bold'
       ) +
       ggplot2::geom_point(ggplot2::aes(ev$EV, groups - .5), size = 1) +
@@ -196,7 +196,30 @@ build_plot_point_estimates_interactive <-
       }
     }
 
-
+    # Guiding arrows
+    plot_ci <- plot_ci +
+      ggplot2::geom_segment(
+        data = data %>%
+          dplyr::filter(i == j),
+        ggplot2::aes(
+          x = x * ratio + abs(x_max),
+          y = length(contrasts[1, 1, ]) - y + .5,
+          xend = (x + 0.5) * ratio +
+            abs(x_max),
+          yend = length(contrasts[1, 1, ]) - y + .5
+        )
+      ) +
+      ggplot2::geom_segment(
+        data = data,
+        ggplot2::aes(
+          x = (x + 0.5) * ratio + x_max,
+          y = length(contrasts[1, 1, ]) - y + .5,
+          xend =  (x + 0.5) * ratio +
+            abs(x_max),
+          yend = length(contrasts[1, 1, ]) - y
+        ),
+        arrow = ggplot2::arrow(length = grid::unit(0.25, "cm"))
+      )
 
     if (p_bars) {
       p_val_plot <-
@@ -316,31 +339,6 @@ build_plot_point_estimates_interactive <-
           breaks = seq(0, 1, by = 0.25)
         )
     }
-
-    # Guiding arrows
-    plot_ci <- plot_ci +
-      ggplot2::geom_segment(
-        data = data %>%
-          dplyr::filter(i == j),
-        ggplot2::aes(
-          x = x * ratio + abs(x_max),
-          y = length(contrasts[1, 1,]) - y + .5,
-          xend = (x + 0.5) * ratio +
-            abs(x_max),
-          yend = length(contrasts[1, 1,]) - y + .5
-        )
-      ) +
-      ggplot2::geom_segment(
-        data = data,
-        ggplot2::aes(
-          x = (x + 0.5) * ratio + x_max,
-          y = length(contrasts[1, 1,]) - y + .5,
-          xend =  (x + 0.5) * ratio +
-            abs(x_max),
-          yend = length(contrasts[1, 1,]) - y
-        ),
-        arrow = ggplot2::arrow(length = grid::unit(0.25, "cm"))
-      )
 
     return(plot_ci)
   }
