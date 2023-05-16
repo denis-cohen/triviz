@@ -143,30 +143,30 @@ build_plot_point_estimates <-
       }
     }
 
-    # ## Guiding arrows
-    # plot_ci <- plot_ci +
-    #   ggplot2::geom_segment(
-    #     data = data %>%
-    #       dplyr::filter(i == j),
-    #     ggplot2::aes(
-    #       x = x * ratio + abs(x_max),
-    #       y = length(contrasts[1, 1,]) - y + .5,
-    #       xend = (x + 0.5) * ratio +
-    #         abs(x_max),
-    #       yend = length(contrasts[1, 1,]) - y + .5
-    #     )
-    #   ) +
-    #   ggplot2::geom_segment(
-    #     data = data,
-    #     ggplot2::aes(
-    #       x = (x + 0.5) * ratio + x_max,
-    #       y = length(contrasts[1, 1,]) - y + .5,
-    #       xend =  (x + 0.5) * ratio +
-    #         abs(x_max),
-    #       yend = length(contrasts[1, 1,]) - y
-    #     ),
-    #     arrow = ggplot2::arrow(length = grid::unit(0.25, "cm"))
-    #   )
+    ## Guiding arrows
+    plot_ci <- plot_ci +
+      ggplot2::geom_segment(
+        data = data %>%
+          dplyr::filter(i == j),
+        ggplot2::aes(
+          x = x * ratio + abs(x_max),
+          y = length(contrasts[1, 1,]) - y + .5,
+          xend = (x + 0.5) * ratio +
+            abs(x_max),
+          yend = length(contrasts[1, 1,]) - y + .5
+        )
+      ) +
+      ggplot2::geom_segment(
+        data = data,
+        ggplot2::aes(
+          x = (x + 0.5) * ratio + x_max,
+          y = length(contrasts[1, 1,]) - y + .5,
+          xend =  (x + 0.5) * ratio +
+            abs(x_max),
+          yend = length(contrasts[1, 1,]) - y
+        ),
+        arrow = ggplot2::arrow(length = grid::unit(0.25, "cm"))
+      )
 
     if (p_bars) {
       p_val_plot <-
