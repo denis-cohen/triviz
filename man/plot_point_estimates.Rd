@@ -13,7 +13,9 @@ plot_point_estimates(
   one_tailed_test = FALSE,
   p_val_threshold = 0.05,
   p_val_type = "p-value",
-  interactive = FALSE
+  interactive = FALSE,
+  caption_exp = "Expected values",
+  caption_stat = "Statistical Significance of\\nPairwise Differences"
 )
 }
 \arguments{

@@ -32,7 +32,9 @@ plot_point_estimates <- function(estimates,
                                  one_tailed_test = FALSE,
                                  p_val_threshold = 0.05,
                                  p_val_type = "p-value",
-                                 interactive = FALSE) {
+                                 interactive = FALSE,
+                                 caption_exp = "Expected values",
+                                 caption_stat = "Statistical Significance of\nPairwise Differences") {
   ## Warnings
   if (missing(estimates)) {
     stop("Please pass a triviz_estimates object to `estimates`.")
@@ -99,7 +101,9 @@ plot_point_estimates <- function(estimates,
         color_palette = color_palette,
         p_val_threshold = p_val_threshold,
         p_val_type = p_val_type,
-        p_bars = p_bars
+        p_bars = p_bars,
+        caption_exp,
+        caption_stat
       )
     return(plot_ci)
   } else {
@@ -117,7 +121,9 @@ plot_point_estimates <- function(estimates,
         color_palette = color_palette,
         p_val_threshold = p_val_threshold,
         p_val_type = p_val_type,
-        p_bars = p_bars
+        p_bars = p_bars,
+        caption_exp,
+        caption_stat
       )
     } else {
       shiny::shinyOptions(
@@ -135,7 +141,9 @@ plot_point_estimates <- function(estimates,
         color_palette = color_palette,
         p_val_threshold = p_val_threshold,
         p_val_type = p_val_type,
-        p_bars = p_bars
+        p_bars = p_bars,
+        caption_exp,
+        caption_stat
       )
     }
 

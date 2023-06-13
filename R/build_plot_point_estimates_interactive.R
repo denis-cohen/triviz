@@ -15,7 +15,9 @@ build_plot_point_estimates_interactive <-
            color_palette,
            p_val_threshold,
            p_val_type,
-           p_bars) {
+           p_bars,
+           caption_exp,
+           caption_stat) {
     # Initialize ggplot object with scales
     n_ticks <- 5
     breaks <- labeling::extended(
@@ -63,9 +65,9 @@ build_plot_point_estimates_interactive <-
 
 
     # Define axis descriptions
-    caption_exp <- data.frame(exp_val = c("Expected Values"))
+    caption_exp <- data.frame(exp_val = c(caption_exp))
     caption_stat <-
-      data.frame(stat = c("Statistical Significance of\nPairwise Differences"))
+      data.frame(stat = c(caption_stat))
     caption_pval <- data.frame(pval = c(p_val_type))
 
     # Draw basic layout of left part of the plot
@@ -249,7 +251,7 @@ build_plot_point_estimates_interactive <-
             abs(x_max),
           yend = length(contrasts[1, 1, ]) - y
         ),
-        arrow = ggplot2::arrow(length = grid::unit(0.25, "cm"))
+        arrow = ggplot2::arrow(length = grid::unit(3 * (2 + rows) ^ (-1.75), "cm"))
       )
 
     if (p_bars) {
@@ -309,22 +311,23 @@ build_plot_point_estimates_interactive <-
         ggpattern::geom_rect_pattern(
           data = data,
           ggplot2::aes(
-            pattern = hatched,
             fill = p_val,
-            xmin = x * ratio +
-              abs(x_max),
+            pattern_alpha = ifelse(hatched, 1, 0),
+            xmin = x * ratio + abs(x_max),
             xmax = (x + 1) * ratio +
               abs(x_max),
-            ymin = length(contrasts[1, 1,]) -
+            ymin = length(contrasts[1, 1, ]) -
               y,
-            ymax = length(contrasts[1, 1,]) -
+            ymax = length(contrasts[1, 1, ]) -
               y - 1
           ),
+          pattern = "stripe",
           pattern_colour = "gray35",
           pattern_fill = "white",
           pattern_angle = 45,
-          pattern_density = 0.005,
-          pattern_spacing = 0.1 / rows
+          pattern_density = .3 * (1 + rows) ^ (-1.75),
+          pattern_spacing = 3 * (7 + rows) ^ (-1.75),
+          color = "black"
         ) +
         ggplot2::guides(pattern = "none")
     }

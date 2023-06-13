@@ -159,6 +159,9 @@ build_plot_continuous_estimates <-
         fontface = 'bold'
       )
 
+    # Number of rows in plot
+    rows <- length(unique(ev$Group))
+
     # Draw lines and confidence intervals
     for (group in shiny::req(unique(ev$Group))) {
       ev_filtered <- ev %>%
