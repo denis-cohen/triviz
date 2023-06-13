@@ -43,17 +43,17 @@ get_est_numerical_flex <- function(draws,
   }
 
   ## Medians
-  ev_medians <- apply(ev_draws, 2, stats::median)
+  medians <- apply(draws, 2, stats::median)
 
   ## Level order
-  ordered_levels <- order(ev_medians)
-  ordered_labels <- names(ev_medians)[ordered_levels]
+  ordered_levels <- order(medians)
+  ordered_labels <- names(medians)[ordered_levels]
 
   ## Ordered expected values (draws)
-  ev_draws <- ev_draws[, ordered_levels]
+  draws <- draws[, ordered_levels]
 
   ## Ordered expected values (summaries)
-  ev <- apply(ev_draws, 2, function (x) {
+  ev <- apply(draws, 2, function (x) {
     c(
       "EV" = stats::median(x),
       "SE" = stats::sd(x),
@@ -78,20 +78,20 @@ get_est_numerical_flex <- function(draws,
     dplyr::as_tibble(., rownames = "Group")
 
   ## Pairwise contrasts (draws)
-  contrasts_draws <- array(NA, dim = c(ncol(ev_draws) - 1L,
+  contrasts_draws <- array(NA, dim = c(ncol(draws) - 1L,
                                        n_draws,
-                                       ncol(ev_draws)))
+                                       ncol(draws)))
   dimnames(contrasts_draws) <- list(NULL, NULL, ordered_labels)
 
   i_num <- 0L
   for (i in ordered_labels) {
     i_num <- i_num + 1L
-    not_i <- colnames(ev_draws)[colnames(ev_draws) != i]
+    not_i <- colnames(draws)[colnames(draws) != i]
     j_num <- 0L
     for (j in not_i) {
       j_num <- j_num + 1L
       contrasts_draws[j_num, , i_num] <-
-        ev_draws[, j] - ev_draws[, i]
+        draws[, j] - draws[, i]
     }
   }
 
@@ -122,7 +122,7 @@ get_est_numerical_flex <- function(draws,
   output <- list(
     "expected_values" = ev,
     "contrasts" = contrasts,
-    "expected_values_draws" = ev_draws,
+    "expected_values_draws" = draws,
     "contrasts_draws" = contrasts_draws,
     "type" = type,
     "alpha" = alpha,
