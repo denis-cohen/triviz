@@ -91,8 +91,8 @@ build_plot_point_estimates_interactive <-
           xintercept = add_vline,
           linetype = 1,
           color = "red",
-          size = 1,
-          alpha = 0.6
+          size = 0.33,
+          alpha = 0.33
         )
     }
 
