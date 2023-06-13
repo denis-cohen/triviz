@@ -39,7 +39,7 @@ get_est_numerical_flex <- function(draws,
   if (is.null(draws) | !is.matrix(draws) | is.null(colnames(draws))) {
     stop("Please supply 'draws' as a matrix. Group names should be supplied as column names.")
   } else {
-    n_draws <- nrow(posterior_draws)
+    n_draws <- nrow(draws)
   }
 
   ## Medians
