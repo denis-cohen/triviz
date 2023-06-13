@@ -15,7 +15,8 @@ plot_point_estimates(
   p_val_type = "p-value",
   interactive = FALSE,
   caption_exp = "Expected values",
-  caption_stat = "Statistical Significance of\\nPairwise Differences"
+  caption_stat = "Statistical Significance of\\nPairwise Differences",
+  add_vline = NULL
 )
 }
 \arguments{
@@ -42,6 +43,13 @@ Defaults to \code{"viridis"}.}
 
 \item{interactive}{A logical flag indicating whether the plotting function should
 produce an interactive ShinyApp or a static ggplot2 object (the default)}
+
+\item{caption_exp}{A custom caption for the left-hand side of the plot.}
+
+\item{caption_stat}{A custom caption for the right-hand side of the plot.}
+
+\item{add_vline}{Optionally, provide a numerical value for a red vertical line in the
+left-hand side of the plot.}
 }
 \description{
 Plots expected values and triangular visualizations of their pairwise

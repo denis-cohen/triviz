@@ -18,6 +18,10 @@
 #' @param p_val_type (evaluated only when \code{estimates} is a user-supplied object)
 #' @param interactive A logical flag indicating whether the plotting function should
 #' produce an interactive ShinyApp or a static ggplot2 object (the default)
+#' @param caption_exp A custom caption for the left-hand side of the plot.
+#' @param caption_stat A custom caption for the right-hand side of the plot.
+#' @param add_vline Optionally, provide a numerical value for a red vertical line in the
+#' left-hand side of the plot.
 #'
 #' @export
 
@@ -34,7 +38,8 @@ plot_point_estimates <- function(estimates,
                                  p_val_type = "p-value",
                                  interactive = FALSE,
                                  caption_exp = "Expected values",
-                                 caption_stat = "Statistical Significance of\nPairwise Differences") {
+                                 caption_stat = "Statistical Significance of\nPairwise Differences",
+                                 add_vline = NULL) {
   ## Warnings
   if (missing(estimates)) {
     stop("Please pass a triviz_estimates object to `estimates`.")
@@ -103,7 +108,8 @@ plot_point_estimates <- function(estimates,
         p_val_type = p_val_type,
         p_bars = p_bars,
         caption_exp,
-        caption_stat
+        caption_stat,
+        add_vline
       )
     return(plot_ci)
   } else {
@@ -123,7 +129,8 @@ plot_point_estimates <- function(estimates,
         p_val_type = p_val_type,
         p_bars = p_bars,
         caption_exp,
-        caption_stat
+        caption_stat,
+        add_vline
       )
     } else {
       shiny::shinyOptions(
@@ -143,7 +150,8 @@ plot_point_estimates <- function(estimates,
         p_val_type = p_val_type,
         p_bars = p_bars,
         caption_exp,
-        caption_stat
+        caption_stat,
+        add_vline
       )
     }
 

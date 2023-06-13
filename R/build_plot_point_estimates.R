@@ -17,7 +17,8 @@ build_plot_point_estimates <-
            p_val_type,
            p_bars,
            caption_exp,
-           caption_stat) {
+           caption_stat,
+           add_vline) {
     # Initialize ggplot object with scales
     n_ticks <- 5
     breaks <- labeling::extended(
@@ -96,7 +97,20 @@ build_plot_point_estimates <-
           colour = I("black")
         ),
         fill = NA
-      ) +
+      )
+
+    if (!is.null(add_vline)) {
+      plot_ci <- plot_ci +
+        ggplot2::geom_vline(
+          xintercept = add_vline,
+          linetype = 1,
+          color = "red",
+          size = 1,
+          alpha = 0.6
+        )
+    }
+
+    plot_ci <- plot_ci +
       ggplot2::geom_text(
         ggplot2::aes(
           x = x_min - (breaks[2] - breaks[1]) / length(breaks),
