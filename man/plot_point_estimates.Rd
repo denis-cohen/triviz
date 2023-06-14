@@ -16,7 +16,9 @@ plot_point_estimates(
   interactive = FALSE,
   caption_exp = "Expected values",
   caption_stat = "Statistical Significance of\\nPairwise Differences",
-  add_vline = NULL
+  add_vline = NULL,
+  title = NULL,
+  xlim = NULL
 )
 }
 \arguments{
@@ -48,8 +50,13 @@ produce an interactive ShinyApp or a static ggplot2 object (the default)}
 
 \item{caption_stat}{A custom caption for the right-hand side of the plot.}
 
-\item{add_vline}{Optionally, provide a numerical value for a red vertical line in the
+\item{add_vline}{Optional: A numerical value for a red vertical line in the
 left-hand side of the plot.}
+
+\item{title}{Optional: A main title for the plot.}
+
+\item{xlim}{Optional: A range of values for the horizontal axis of the left-hand side
+of the plot.}
 }
 \description{
 Plots expected values and triangular visualizations of their pairwise

@@ -18,7 +18,8 @@ build_plot_point_estimates_interactive <-
            p_bars,
            caption_exp,
            caption_stat,
-           add_vline) {
+           add_vline,
+           title) {
     # Initialize ggplot object with scales
     n_ticks <- 5
     breaks <- labeling::extended(
@@ -386,6 +387,12 @@ build_plot_point_estimates_interactive <-
           limits = c(1, 0),
           breaks = seq(0, 1, by = 0.25)
         )
+    }
+
+    # Optionally, add title
+    if (!is.null(title)) {
+      plot_ci <- plot_ci +
+        ggplot2::ggitlte(title)
     }
 
     return(plot_ci)

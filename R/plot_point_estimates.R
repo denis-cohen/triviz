@@ -20,8 +20,11 @@
 #' produce an interactive ShinyApp or a static ggplot2 object (the default)
 #' @param caption_exp A custom caption for the left-hand side of the plot.
 #' @param caption_stat A custom caption for the right-hand side of the plot.
-#' @param add_vline Optionally, provide a numerical value for a red vertical line in the
+#' @param add_vline Optional: A numerical value for a red vertical line in the
 #' left-hand side of the plot.
+#' @param title Optional: A main title for the plot.
+#' @param xlim Optional: A range of values for the horizontal axis of the left-hand side
+#' of the plot.
 #'
 #' @export
 
@@ -39,7 +42,9 @@ plot_point_estimates <- function(estimates,
                                  interactive = FALSE,
                                  caption_exp = "Expected values",
                                  caption_stat = "Statistical Significance of\nPairwise Differences",
-                                 add_vline = NULL) {
+                                 add_vline = NULL,
+                                 title = NULL,
+                                 xlim = NULL) {
   ## Warnings
   if (missing(estimates)) {
     stop("Please pass a triviz_estimates object to `estimates`.")
@@ -91,6 +96,12 @@ plot_point_estimates <- function(estimates,
 
   span <-
     abs(max(estimates$expected_values$lower) - min(estimates$expected_values$lower))
+
+  if (is.null(xlim)) {
+    xlim <- c(min(estimates$expected_values$lower) - 0.1 * span,
+              max(estimates$expected_values$upper) + 0.1 * span)
+  }
+
   if (!interactive) {
     plot_ci <-
       build_plot_point_estimates(
@@ -100,8 +111,8 @@ plot_point_estimates <- function(estimates,
         groups = rev(seq(
           1, nrow(estimates$expected_values), 1
         )),
-        x_min = min(estimates$expected_values$lower) - 0.1 * span,
-        x_max = max(estimates$expected_values$upper) + 0.1 * span,
+        x_min = xlim[1],
+        x_max = xlim[2],
         round_dec = round_dec,
         color_palette = color_palette,
         p_val_threshold = p_val_threshold,
@@ -109,7 +120,8 @@ plot_point_estimates <- function(estimates,
         p_bars = p_bars,
         caption_exp,
         caption_stat,
-        add_vline
+        add_vline,
+        title
       )
     return(plot_ci)
   } else {
@@ -122,15 +134,16 @@ plot_point_estimates <- function(estimates,
           1, nrow(estimates$expected_values), 1
         )),
         round_dec = round_dec,
-        x_min = min(estimates$expected_values$lower) - 0.1 * span,
-        x_max = max(estimates$expected_values$upper) + 0.1 * span,
+        x_min = xlim[1],
+        x_max = xlim[2],
         color_palette = color_palette,
         p_val_threshold = p_val_threshold,
         p_val_type = p_val_type,
         p_bars = p_bars,
         caption_exp,
         caption_stat,
-        add_vline
+        add_vline,
+        title
       )
     } else {
       shiny::shinyOptions(
@@ -143,15 +156,16 @@ plot_point_estimates <- function(estimates,
           1, nrow(estimates$expected_values), 1
         )),
         round_dec = round_dec,
-        x_min = min(estimates$expected_values$lower) - 0.1 * span,
-        x_max = max(estimates$expected_values$upper) + 0.1 * span,
+        x_min = xlim[1],
+        x_max = xlim[2],
         color_palette = color_palette,
         p_val_threshold = p_val_threshold,
         p_val_type = p_val_type,
         p_bars = p_bars,
         caption_exp,
         caption_stat,
-        add_vline
+        add_vline,
+        title
       )
     }
 

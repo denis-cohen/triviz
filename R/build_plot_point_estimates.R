@@ -18,7 +18,8 @@ build_plot_point_estimates <-
            p_bars,
            caption_exp,
            caption_stat,
-           add_vline) {
+           add_vline,
+           title) {
     # Initialize ggplot object with scales
     n_ticks <- 5
     breaks <- labeling::extended(
@@ -295,6 +296,13 @@ build_plot_point_estimates <-
         legend.title = ggplot2::element_text(size = 7, face = "bold"),
         legend.text = ggplot2::element_text(size = 7)
       )
+
+
+    # Optionally, add title
+    if (!is.null(title)) {
+      plot_ci <- plot_ci +
+        ggplot2::ggitlte(title)
+    }
 
     return(plot_ci)
   }
