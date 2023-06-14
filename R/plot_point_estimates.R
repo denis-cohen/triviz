@@ -121,7 +121,8 @@ plot_point_estimates <- function(estimates,
         caption_exp,
         caption_stat,
         add_vline,
-        title
+        title,
+        one_tailed_test
       )
     return(plot_ci)
   } else {
@@ -143,7 +144,8 @@ plot_point_estimates <- function(estimates,
         caption_exp,
         caption_stat,
         add_vline,
-        title
+        title,
+        one_tailed_test
       )
     } else {
       shiny::shinyOptions(
@@ -165,7 +167,8 @@ plot_point_estimates <- function(estimates,
         caption_exp,
         caption_stat,
         add_vline,
-        title
+        title,
+        one_tailed_test
       )
     }
 

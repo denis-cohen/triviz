@@ -52,7 +52,7 @@ or a user-supplied link function}
 \code{"simulation"}, \code{"bootstrap"}, \code{"bayesian"}. Simulation-based
 and bootstrapped confidence intervals are calculated as part of the function;
 Bayesian credible intervals require the provision of \code{posterior_draws}
-along with \code{data}, \code{formula}, and \variable{variable}.}
+along with \code{data}, \code{formula}, and \code{variable}.}
 
 \item{posterior_draws}{A matrix of posterior draws (in rows) of the model
 coefficients (columns). Only required and evaluated if \code{type == "bayesian"}.}

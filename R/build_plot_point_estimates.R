@@ -19,7 +19,8 @@ build_plot_point_estimates <-
            caption_exp,
            caption_stat,
            add_vline,
-           title) {
+           title,
+           one_tailed_test) {
     # Initialize ggplot object with scales
     n_ticks <- 5
     breaks <- labeling::extended(
@@ -271,13 +272,21 @@ build_plot_point_estimates <-
                         width = 0,
                         ggplot2::aes(fill = p, x = x_min, y = p))
 
+    if (one_tailed_test) {
+      p_val_limits <- c(0, .55)
+      p_val_breaks <- seq(0, .5, by = .125)
+    } else {
+      p_val_limits <- c(0, 1)
+      p_val_breaks <- seq(0, 1, by = 0.25)
+    }
+
     if (type == "bayesian") {
       plot_ci <- plot_ci +
         ggplot2::scale_fill_continuous(
           type = color_palette,
           "",
-          limits = c(0, 1),
-          breaks = seq(0, 1, by = 0.25)
+          limits = p_val_limits,
+          breaks = p_val_breaks
         )
     } else {
       plot_ci <- plot_ci +
@@ -285,8 +294,8 @@ build_plot_point_estimates <-
           type = color_palette,
           trans = 'reverse',
           "",
-          limits = c(1, 0),
-          breaks = seq(0, 1, by = 0.25)
+          limits = rev(p_val_limits),
+          breaks = p_val_breaks
         )
     }
 
@@ -301,7 +310,7 @@ build_plot_point_estimates <-
     # Optionally, add title
     if (!is.null(title)) {
       plot_ci <- plot_ci +
-        ggplot2::ggitlte(title)
+        ggplot2::ggtitle(title)
     }
 
     return(plot_ci)
