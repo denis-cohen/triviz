@@ -20,7 +20,8 @@ build_plot_point_estimates <-
            caption_stat,
            add_vline,
            title,
-           one_tailed_test) {
+           one_tailed_test,
+           show_lower_triangular_title) {
     # Initialize ggplot object with scales
     n_ticks <- 5
     breaks <- labeling::extended(
@@ -156,38 +157,57 @@ build_plot_point_estimates <-
                   contrasts[j, , i]["p"] < p_val_threshold
                 ),
                 FALSE
-              )
+              ),
+              group_name = ev$Group[i]
             )
           )
         }
       }
     }
 
-    ## Guiding arrows
-    plot_ci <- plot_ci +
-      ggplot2::geom_segment(
-        data = data %>%
-          dplyr::filter(i == j),
-        ggplot2::aes(
-          x = x * ratio + abs(x_max),
-          y = length(contrasts[1, 1,]) - y + .5,
-          xend = (x + 0.5) * ratio +
-            abs(x_max),
-          yend = length(contrasts[1, 1,]) - y + .5
+    if (show_lower_triangular_title) {
+      plot_ci <- plot_ci +
+        ggplot2::geom_text(
+          data = data %>%
+            dplyr::filter(i == j),
+          ggplot2::aes(
+            x = (x + 0.5) * ratio + abs(x_max),
+            y = length(contrasts[1, 1,]) - y,
+            label = group_name
+          ),
+          size = 2,
+          #vjust = "right",
+          hjust = "left",
+          angle = 90,
+          fontface = 'bold',
+          nudge_y = 0.1
         )
-      ) +
-      ggplot2::geom_segment(
-        data = data,
-        ggplot2::aes(
-          x = (x + 0.5) * ratio + x_max,
-          y = length(contrasts[1, 1,]) - y + .5,
-          xend =  (x + 0.5) * ratio +
-            abs(x_max),
-          yend = length(contrasts[1, 1,]) - y
-        ),
-        arrow = ggplot2::arrow(length = grid::unit(3 * (7 + rows) ^ (-1), "cm"))
-      )
-
+    } else {
+      ## Guiding arrows
+      plot_ci <- plot_ci +
+        ggplot2::geom_segment(
+          data = data %>%
+            dplyr::filter(i == j),
+          ggplot2::aes(
+            x = x * ratio + abs(x_max),
+            y = length(contrasts[1, 1,]) - y + .5,
+            xend = (x + 0.5) * ratio +
+              abs(x_max),
+            yend = length(contrasts[1, 1,]) - y + .5
+          )
+        ) +
+        ggplot2::geom_segment(
+          data = data,
+          ggplot2::aes(
+            x = (x + 0.5) * ratio + x_max,
+            y = length(contrasts[1, 1,]) - y + .5,
+            xend =  (x + 0.5) * ratio +
+              abs(x_max),
+            yend = length(contrasts[1, 1,]) - y
+          ),
+          arrow = ggplot2::arrow(length = grid::unit(3 * (7 + rows) ^ (-1), "cm"))
+        )
+    }
     if (p_bars) {
       p_val_plot <-
         ggplot2::ggplot(data, ggplot2::aes_string(x = 0, "p_val")) +

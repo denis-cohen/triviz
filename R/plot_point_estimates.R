@@ -25,6 +25,7 @@
 #' @param title Optional: A main title for the plot.
 #' @param xlim Optional: A range of values for the horizontal axis of the left-hand side
 #' of the plot.
+#' @param show_lower_triangular_title Optional: Show lower triangular column title instead of arrows.
 #'
 #' @export
 
@@ -44,7 +45,8 @@ plot_point_estimates <- function(estimates,
                                  caption_stat = "Statistical Significance of\nPairwise Differences",
                                  add_vline = NULL,
                                  title = NULL,
-                                 xlim = NULL) {
+                                 xlim = NULL,
+                                 show_lower_triangular_title = FALSE) {
   ## Warnings
   if (missing(estimates)) {
     stop("Please pass a triviz_estimates object to `estimates`.")
@@ -122,10 +124,15 @@ plot_point_estimates <- function(estimates,
         caption_stat = caption_stat,
         add_vline = add_vline,
         title = title,
-        one_tailed_test = one_tailed_test
+        one_tailed_test = one_tailed_test,
+        show_lower_triangular_title = show_lower_triangular_title
       )
     return(plot_ci)
   } else {
+    if (show_lower_triangular_title) {
+      stop("Lower triangular titles (show_lower_triangular_title) are not supported for interactive plots.")
+    }
+
     if (type == "analytical") {
       shiny::shinyOptions(
         ev = estimates$expected_values,
