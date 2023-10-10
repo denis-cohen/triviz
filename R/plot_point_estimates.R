@@ -118,11 +118,11 @@ plot_point_estimates <- function(estimates,
         p_val_threshold = p_val_threshold,
         p_val_type = p_val_type,
         p_bars = p_bars,
-        caption_exp,
-        caption_stat,
-        add_vline,
-        title,
-        one_tailed_test
+        caption_exp = caption_exp,
+        caption_stat = caption_stat,
+        add_vline = add_vline,
+        title = title,
+        one_tailed_test = one_tailed_test
       )
     return(plot_ci)
   } else {
@@ -141,11 +141,11 @@ plot_point_estimates <- function(estimates,
         p_val_threshold = p_val_threshold,
         p_val_type = p_val_type,
         p_bars = p_bars,
-        caption_exp,
-        caption_stat,
-        add_vline,
-        title,
-        one_tailed_test
+        caption_exp = caption_exp,
+        caption_stat = caption_stat,
+        add_vline = add_vline,
+        title = title,
+        one_tailed_test = one_tailed_test
       )
     } else {
       shiny::shinyOptions(
@@ -164,11 +164,11 @@ plot_point_estimates <- function(estimates,
         p_val_threshold = p_val_threshold,
         p_val_type = p_val_type,
         p_bars = p_bars,
-        caption_exp,
-        caption_stat,
-        add_vline,
-        title,
-        one_tailed_test
+        caption_exp = caption_exp,
+        caption_stat = caption_stat,
+        add_vline = add_vline,
+        title = title,
+        one_tailed_test = one_tailed_test
       )
     }
 

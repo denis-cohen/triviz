@@ -117,11 +117,16 @@ server <- function(input, output, session) {
       color_palette,
       p_val_threshold,
       p_val_type,
-      p_bars
+      p_bars,
+      caption_exp,
+      caption_stat,
+      add_vline,
+      title,
+      one_tailed_test
     )
 
   # Preparing for output using ggiraph
-  output$triangularmatrix <- ggiraph::renderggiraph({
+  output$triangularmatrix <- ggiraph::renderGirafe({
     plot <- ggiraph::girafe(ggobj = plot_ci, width = 10)
     plot <- ggiraph::girafe_options(
       plot,
@@ -183,6 +188,11 @@ color_palette <- getShinyOption("color_palette")
 p_val_threshold <- getShinyOption("p_val_threshold")
 p_val_type <- getShinyOption("p_val_type")
 p_bars <- getShinyOption("p_bars")
+caption_exp <- getShinyOption("caption_exp")
+caption_stat <- getShinyOption("caption_stat")
+add_vline <- getShinyOption("add_vline")
+title <- getShinyOption("title")
+one_tailed_test <- getShinyOption("one_tailed_test")
 
 # Run the shiny application
 shiny::shinyApp(ui = ui, server = server)
