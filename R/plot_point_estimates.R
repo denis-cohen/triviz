@@ -25,7 +25,8 @@
 #' @param title Optional: A main title for the plot.
 #' @param xlim Optional: A range of values for the horizontal axis of the left-hand side
 #' of the plot.
-#' @param show_lower_triangular_title Optional: Show lower triangular column title instead of arrows.
+#' @param show_lower_triangular_title Optional: Show lower triangular column titles
+#' instead of arrows.
 #'
 #' @export
 

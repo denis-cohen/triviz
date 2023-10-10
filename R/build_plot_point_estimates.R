@@ -176,7 +176,6 @@ build_plot_point_estimates <-
             label = group_name
           ),
           size = 2,
-          #vjust = "right",
           hjust = "left",
           angle = 90,
           fontface = 'bold',

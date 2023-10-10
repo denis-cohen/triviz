@@ -19,7 +19,8 @@ build_plot_continuous_estimates <-
            color_palette,
            one_tailed_test,
            p_val_threshold,
-           p_val_type) {
+           p_val_type,
+           show_lower_triangular_title) {
     ev <- ev %>%
       mutate(Group = as.character(Group))
 
@@ -207,36 +208,56 @@ build_plot_continuous_estimates <-
       filtered_group <- contrasts %>%
         filter(Group1 == unique_groups[group1])
 
-      # Arrows
       if (group1 < length(unique_groups)) {
-        plot_ci <- plot_ci +
-          ggplot2::geom_segment(
-            data = cbind.data.frame(x = group1 - 1,
-                                    y = max_y_range * (length(
-                                      unique_groups
-                                    ) - group1)),
-            ggplot2::aes(
-              x = x * ratio_y_range + x_max,
-              y = y + max_y_range * 0.5,
-              xend = x * ratio_y_range + ratio_y_range *
-                0.5 + x_max,
-              yend = y + max_y_range * 0.5
+        if (show_lower_triangular_title) {
+          plot_ci <- plot_ci +
+            ggplot2::geom_text(
+              data = cbind.data.frame(x = group1 - 1,
+                                      y = max_y_range * (length(
+                                        unique_groups
+                                      ) - group1)),
+              ggplot2::aes(
+                x = (x + 0.5) * ratio_y_range + abs(x_max),
+                y = y,
+              ),
+              label = ev$Group[group1],
+              size = 2,
+              hjust = "left",
+              angle = 90,
+              fontface = 'bold',
+              nudge_y = 0.1
             )
-          ) +
-          ggplot2::geom_segment(
-            data = cbind.data.frame(x = group1 - 1,
-                                    y = max_y_range * (length(
-                                      unique_groups
-                                    ) - group1)),
-            ggplot2::aes(
-              x = x * ratio_y_range + ratio_y_range * 0.5 + x_max,
-              y = y + max_y_range * 0.5,
-              xend = x * ratio_y_range + ratio_y_range *
-                0.5 + x_max,
-              yend = y
-            ),
-            arrow = ggplot2::arrow(length = grid::unit(0.25, "cm"))
-          )
+          } else {
+            # Arrows
+            plot_ci <- plot_ci +
+              ggplot2::geom_segment(
+                data = cbind.data.frame(x = group1 - 1,
+                                        y = max_y_range * (length(
+                                          unique_groups
+                                        ) - group1)),
+                ggplot2::aes(
+                  x = x * ratio_y_range + x_max,
+                  y = y + max_y_range * 0.5,
+                  xend = x * ratio_y_range + ratio_y_range *
+                    0.5 + x_max,
+                  yend = y + max_y_range * 0.5
+                )
+              ) +
+              ggplot2::geom_segment(
+                data = cbind.data.frame(x = group1 - 1,
+                                        y = max_y_range * (length(
+                                          unique_groups
+                                        ) - group1)),
+                ggplot2::aes(
+                  x = x * ratio_y_range + ratio_y_range * 0.5 + x_max,
+                  y = y + max_y_range * 0.5,
+                  xend = x * ratio_y_range + ratio_y_range *
+                    0.5 + x_max,
+                  yend = y
+                ),
+                arrow = ggplot2::arrow(length = grid::unit(0.25, "cm"))
+              )
+          }
       }
 
       for (group2 in 1:length(unique_groups)) {

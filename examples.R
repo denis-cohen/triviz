@@ -36,7 +36,7 @@ analytical_est <- triviz::get_est_analytical(
   variable = "pid"
 )
 
-plot_point_estimates(estimates = list("expected_values" = analytical_est$expected_values,
+triviz::plot_point_estimates(estimates = list("expected_values" = analytical_est$expected_values,
                                       "contrasts" = analytical_est$contrasts),
                      p_val_threshold = 0.05,
                      interactive = FALSE,
@@ -81,4 +81,5 @@ triviz::plot_continuous_estimates(estimates = list("expected_values" = analytica
                             variable_label = "log(hin_eq)",
                             one_tailed_test = FALSE,
                             p_val_threshold = 0.1,
-                            interactive = FALSE)
+                            interactive = FALSE,
+                            show_lower_triangular_title = TRUE)

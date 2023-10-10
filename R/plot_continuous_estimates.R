@@ -21,6 +21,8 @@
 #' @param p_val_type (evaluated only when \code{estimates} is a user-supplied object)
 #' @param interactive A logical flag indicating whether the plotting function should
 #' produce an interactive ShinyApp or a static ggplot2 object (the default)
+#' @param show_lower_triangular_title Optional: Show lower triangular column titles
+#' instead of arrows.
 #'
 #' @export
 
@@ -36,7 +38,8 @@ plot_continuous_estimates <- function(estimates,
                                       one_tailed_test = FALSE,
                                       p_val_threshold = 0.05,
                                       p_val_type = "p-value",
-                                      interactive = FALSE) {
+                                      interactive = FALSE,
+                                      show_lower_triangular_title = FALSE) {
   ## Warnings
   if (missing(estimates)) {
     stop("Please pass a suitable object to `estimates`.")
@@ -91,10 +94,15 @@ plot_continuous_estimates <- function(estimates,
         color_palette = color_palette,
         one_tailed_test = one_tailed_test,
         p_val_threshold = p_val_threshold,
-        p_val_type = p_val_type
+        p_val_type = p_val_type,
+        show_lower_triangular_title = show_lower_triangular_title
       )
     return(plot_ci)
   } else {
+    if (show_lower_triangular_title) {
+      stop("Lower triangular titles (show_lower_triangular_title) are not supported for interactive plots.")
+    }
+
     shiny::shinyOptions(
       ev = estimates$expected_values,
       variable = variable,
