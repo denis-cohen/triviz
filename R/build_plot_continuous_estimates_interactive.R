@@ -158,10 +158,10 @@ build_plot_continuous_estimates_interactive <-
           xmin = x_min,
           xmax = x_max,
           ymin = groups_y_range - max_y_range,
-          ymax = groups_y_range * .999,
-          colour = I("black")
+          ymax = groups_y_range * .999
         ),
-        fill = NA
+        fill = NA,
+        colour = I("black")
       ) +
       ggplot2::geom_text(
         x = x_min - (abs(x_max) - abs(x_min)) / n_ticks_y,
@@ -365,10 +365,10 @@ build_plot_continuous_estimates_interactive <-
                 ymin = y,
                 ymax = y + max_y_range,
                 data_id = paste0(group1, "+", group2, "_fd"),
-                colour = "black",
                 tooltip = tooltip
               ),
-              alpha = 0.01
+              alpha = 0.01,
+              colour = "black"
             )
         }
       }
