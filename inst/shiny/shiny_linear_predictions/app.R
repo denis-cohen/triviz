@@ -2,7 +2,7 @@ utils::globalVariables(c("caption_exp", "stat", "pval", "tooltip", "x", "y"))
 
 # Plot first difference distributions in a modal
 plotModal <- function(session, id) {
-  modalDialog(ggiraph::renderggiraph({
+  modalDialog(ggiraph::renderGirafe({
     group2 <- gsub(".*\\+(.*?)_.*", "\\1", id)
     group1 <- gsub("(.*)\\+.*", "\\1", id)
 
@@ -83,7 +83,7 @@ server <- function(input, output, session) {
       p_val_type
     )
   # Preparing for output using ggiraph
-  output$triangularmatrix <- ggiraph::renderggiraph({
+  output$triangularmatrix <- ggiraph::renderGirafe({
     plot <- ggiraph::girafe(ggobj = plot_ci, width = 10)
     plot <- ggiraph::girafe_options(
       plot,
