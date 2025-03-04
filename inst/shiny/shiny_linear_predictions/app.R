@@ -58,7 +58,7 @@ ui <- shiny::fluidPage(
   shiny::fluidRow(
     tags$div(
       style = "position: relative;",
-      ggiraph::ggiraphOutput(outputId = "triangularmatrix", height = "900px")
+      ggiraph::girafeOutput(outputId = "triangularmatrix", height = "900px")
     )
   )
 )
