@@ -12,7 +12,7 @@ utils::globalVariables(c(
 
 # Plot first difference distributions in a modal
 plotModal <- function(session, id, groups) {
-  modalDialog(ggiraph::renderggiraph({
+  modalDialog(ggiraph::renderGirafe({
     i <- as.integer(gsub(".*_(.*?)_.*", "\\1", id))
     j <- as.integer(gsub("_(.*)", "", id)) + 1
 
