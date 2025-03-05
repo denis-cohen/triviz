@@ -9,9 +9,18 @@
 #' @param seq_length Length of the value sequence of \code{continuous_variable}
 #' for the calculation of the continuous estimates
 #' @param alpha Confidence level
+#' @param twotailed Two-tailed (the default) or one-tailed hypothesis test
 #'
 #' @return Returns group-specific continuous estimates and all pairwise
 #' differences with analytical 95% confidence intervals.
+#'
+#' @importFrom magrittr %>%
+#' @importFrom stats median
+#' @importFrom stats model.matrix
+#' @importFrom stats pnorm
+#' @importFrom stats qnorm
+#' @importFrom stats quantile
+#' @importFrom stats sd
 #'
 #' @export
 
@@ -24,22 +33,19 @@ get_est_analytical_continuous <- function(model,
                                           alpha = 0.05,
                                           twotailed = TRUE) {
   ## Data list
-  data_list <- list(levels(dat[[group_variable]]),
-                    seq(min(dat[[continuous_variable]], na.rm = TRUE),
-                        max(dat[[continuous_variable]], na.rm = TRUE),
-                        length.out = seq_length))
-  names(data_list) <- c(group_variable,
-                        continuous_variable)
+  data_list <- list(levels(dat[[group_variable]]), seq(min(dat[[continuous_variable]], na.rm = TRUE), max(dat[[continuous_variable]], na.rm = TRUE), length.out = seq_length))
+  names(data_list) <- c(group_variable, continuous_variable)
 
   ## Expected values
-  ev <- prediction::prediction(mod,
-                               at = data_list,
-                               vce = "delta",
-                               level = 1 - alpha * (1 + as.numeric(!twotailed))) %>%
+  ev <- prediction::prediction(
+    mod,
+    at = data_list,
+    vce = "delta",
+    level = 1 - alpha * (1 + as.numeric(!twotailed))
+  ) %>%
     summary() %>%
     dplyr::rename(
-      Group = paste0("at(", group_variable, ")"),
-      !!as.name(continuous_variable) := paste0("at(", continuous_variable, ")")
+      Group = paste0("at(", group_variable, ")"),!!as.name(continuous_variable) := paste0("at(", continuous_variable, ")")
     ) %>%
     dplyr::rename(EV = Prediction) %>%
     dplyr::select(-z)
@@ -54,13 +60,14 @@ get_est_analytical_continuous <- function(model,
   ## Pairwise contrasts
   contrasts <- lapply(seq_along(ordered_labels), function (j) {
     margins::margins(
-      stats::update(mod,
-                    data = dat %>%
-                      mutate(
-                        !!sym(group_variable) :=
-                          relevel(!!sym(group_variable),
-                                  ref = ordered_labels[j])
-                      )),
+      stats::update(
+        mod,
+        data = dat %>%
+          dplyr::mutate(
+            !!dplyr::sym(group_variable) :=
+              stats::relevel(!!sym(group_variable), ref = ordered_labels[j])
+          )
+      ),
       variable = group_variable,
       at = data_list[continuous_variable],
       vce = "delta",
@@ -68,11 +75,17 @@ get_est_analytical_continuous <- function(model,
     ) %>%
       base::summary() %>%
       dplyr::slice(order(AME)) %>%
-      dplyr::rename(FD = AME,
-                    Group1 = factor) %>%
+      dplyr::rename(FD = AME, Group1 = factor) %>%
       dplyr::mutate(Group2 = ordered_labels[j],
                     Group1 = gsub(group_variable, "", Group1)) %>%
-      dplyr::select(Group1, Group2, FD, SE, p, lower, upper, !!as.name(continuous_variable))
+      dplyr::select(Group1,
+                    Group2,
+                    FD,
+                    SE,
+                    p,
+                    lower,
+                    upper,
+                    !!as.name(continuous_variable))
   }) %>%
     do.call(rbind, .) %>%
     dplyr::arrange(Group1, !!as.name(continuous_variable), Group2)

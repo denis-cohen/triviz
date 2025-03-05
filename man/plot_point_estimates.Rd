@@ -18,7 +18,8 @@ plot_point_estimates(
   caption_stat = "Statistical Significance of\\nPairwise Differences",
   add_vline = NULL,
   title = NULL,
-  xlim = NULL
+  xlim = NULL,
+  show_lower_triangular_title = FALSE
 )
 }
 \arguments{
@@ -57,6 +58,9 @@ left-hand side of the plot.}
 
 \item{xlim}{Optional: A range of values for the horizontal axis of the left-hand side
 of the plot.}
+
+\item{show_lower_triangular_title}{Optional: Show lower triangular column titles
+instead of arrows.}
 }
 \description{
 Plots expected values and triangular visualizations of their pairwise

@@ -24,6 +24,14 @@
 #' @param show_lower_triangular_title Optional: Show lower triangular column titles
 #' instead of arrows.
 #'
+#' @importFrom magrittr %>%
+#' @importFrom stats median
+#' @importFrom stats model.matrix
+#' @importFrom stats pnorm
+#' @importFrom stats qnorm
+#' @importFrom stats quantile
+#' @importFrom stats sd
+#'
 #' @export
 
 plot_continuous_estimates <- function(estimates,

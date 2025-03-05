@@ -21,7 +21,6 @@ Imports:
     dplyr (>= 1.0.0),
     shiny (>= 1.7.1),
     ggiraph (>= 0.7.1),
-    ggplotify (>= 0.1.0),
     magrittr (>= 2.0.1),
     rlang (>= 0.4.12),
     stats (>= 4.0.4),
@@ -29,7 +28,9 @@ Imports:
     margins (>= 0.3.26),
     ggpattern (>= 0.4.2),
     prediction (>= 0.3.14),
-    labeling (>= 0.4.2)
+    labeling (>= 0.4.2),
+    ggplot2(>= 3.5.1),
+    viridis(>= 0.6.5)
 Remotes:
     github::coolbutuseless/ggpattern
 Suggests:
@@ -41,4 +42,4 @@ VignetteBuilder:
 Encoding: UTF-8
 Language: en-US
 LazyData: true
-RoxygenNote: 7.2.1
+RoxygenNote: 7.3.2

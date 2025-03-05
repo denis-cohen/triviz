@@ -2,6 +2,14 @@
 #'
 #' @description Internal function
 #'
+#' @importFrom magrittr %>%
+#' @importFrom stats median
+#' @importFrom stats model.matrix
+#' @importFrom stats pnorm
+#' @importFrom stats qnorm
+#' @importFrom stats quantile
+#' @importFrom stats sd
+#'
 #' @noRd
 
 build_plot_continuous_estimates <-
@@ -22,7 +30,7 @@ build_plot_continuous_estimates <-
            p_val_type,
            show_lower_triangular_title) {
     ev <- ev %>%
-      mutate(Group = as.character(Group))
+      dplyr::mutate(Group = as.character(Group))
 
     n_ticks_x <- 4
     n_ticks_y <- 5
@@ -90,7 +98,7 @@ build_plot_continuous_estimates <-
       panel.grid.minor.y = ggplot2::element_blank(),
       panel.border = ggplot2::element_blank(),
       panel.grid.major.x = ggplot2::element_line(
-        colour = "grey75",
+        color = "grey75",
         linetype = 3,
         size = 0.5
       ),
@@ -105,8 +113,7 @@ build_plot_continuous_estimates <-
         breaks = breaks_x,
         labels = labels_x
       ) +
-      ggplot2::coord_fixed(ratio = ratio,
-                           clip = "off") +
+      ggplot2::coord_fixed(ratio = ratio, clip = "off") +
       ggplot2::scale_y_continuous(
         limits = c(0, max(groups_y_range)),
         breaks = breaks_y,
@@ -125,7 +132,7 @@ build_plot_continuous_estimates <-
         data = caption_exp,
         ggplot2::aes(label = caption_exp),
         size = 2.5,
-        x = median(unique(ev[[variable]]), na.rm = TRUE),
+        x = stats::median(unique(ev[[variable]]), na.rm = TRUE),
         y = -max_y_range / n_ticks_y
       ) +
       ggplot2::geom_text(
@@ -166,7 +173,7 @@ build_plot_continuous_estimates <-
     # Draw lines and confidence intervals
     for (group in shiny::req(unique(ev$Group))) {
       ev_filtered <- ev %>%
-        filter(Group == group) %>%
+        dplyr::filter(Group == group) %>%
         as.data.frame()
 
       plot_ci <- plot_ci +
@@ -189,33 +196,31 @@ build_plot_continuous_estimates <-
           alpha = 0.5
         ) +
         ggplot2::geom_line(
-          data = cbind.data.frame(x = ev_filtered[, variable],
-                                  y = groups_y_range[group] -
+          data = cbind.data.frame(x = ev_filtered[, variable], y = groups_y_range[group] -
                                     max_y_range + ev_filtered$EV),
           ggplot2::aes(x, y)
         )
     }
 
     contrasts <- data.frame(contrasts) %>%
-      mutate(Group1 = as.character(Group1)) %>%
-      mutate(Group2 = as.character(Group2)) %>%
-      arrange(Group2, Group1)
+      dplyr::mutate(Group1 = as.character(Group1)) %>%
+      dplyr::mutate(Group2 = as.character(Group2)) %>%
+      dplyr::arrange(Group2, Group1)
 
     ratio_y_range <- max_y_range * ratio
     unique_groups <- unique(ev$Group)
     # Draw p-value boxes and arrows
     for (group1 in 1:length(unique_groups)) {
       filtered_group <- contrasts %>%
-        filter(Group1 == unique_groups[group1])
+        dplyr::filter(Group1 == unique_groups[group1])
 
       if (group1 < length(unique_groups)) {
         if (show_lower_triangular_title) {
           plot_ci <- plot_ci +
             ggplot2::geom_text(
-              data = cbind.data.frame(x = group1 - 1,
-                                      y = max_y_range * (length(
-                                        unique_groups
-                                      ) - group1)),
+              data = cbind.data.frame(x = group1 - 1, y = max_y_range * (length(
+                unique_groups
+              ) - group1)),
               ggplot2::aes(
                 x = (x + 0.5) * ratio_y_range + abs(x_max),
                 y = y,
@@ -227,37 +232,35 @@ build_plot_continuous_estimates <-
               fontface = 'bold',
               nudge_y = 0.1
             )
-          } else {
-            # Arrows
-            plot_ci <- plot_ci +
-              ggplot2::geom_segment(
-                data = cbind.data.frame(x = group1 - 1,
-                                        y = max_y_range * (length(
-                                          unique_groups
-                                        ) - group1)),
-                ggplot2::aes(
-                  x = x * ratio_y_range + x_max,
-                  y = y + max_y_range * 0.5,
-                  xend = x * ratio_y_range + ratio_y_range *
-                    0.5 + x_max,
-                  yend = y + max_y_range * 0.5
-                )
-              ) +
-              ggplot2::geom_segment(
-                data = cbind.data.frame(x = group1 - 1,
-                                        y = max_y_range * (length(
-                                          unique_groups
-                                        ) - group1)),
-                ggplot2::aes(
-                  x = x * ratio_y_range + ratio_y_range * 0.5 + x_max,
-                  y = y + max_y_range * 0.5,
-                  xend = x * ratio_y_range + ratio_y_range *
-                    0.5 + x_max,
-                  yend = y
-                ),
-                arrow = ggplot2::arrow(length = grid::unit(0.25, "cm"))
+        } else {
+          # Arrows
+          plot_ci <- plot_ci +
+            ggplot2::geom_segment(
+              data = cbind.data.frame(x = group1 - 1, y = max_y_range * (length(
+                unique_groups
+              ) - group1)),
+              ggplot2::aes(
+                x = x * ratio_y_range + x_max,
+                y = y + max_y_range * 0.5,
+                xend = x * ratio_y_range + ratio_y_range *
+                  0.5 + x_max,
+                yend = y + max_y_range * 0.5
               )
-          }
+            ) +
+            ggplot2::geom_segment(
+              data = cbind.data.frame(x = group1 - 1, y = max_y_range * (length(
+                unique_groups
+              ) - group1)),
+              ggplot2::aes(
+                x = x * ratio_y_range + ratio_y_range * 0.5 + x_max,
+                y = y + max_y_range * 0.5,
+                xend = x * ratio_y_range + ratio_y_range *
+                  0.5 + x_max,
+                yend = y
+              ),
+              arrow = ggplot2::arrow(length = grid::unit(0.25, "cm"))
+            )
+        }
       }
 
       for (group2 in 1:length(unique_groups)) {
@@ -269,8 +272,8 @@ build_plot_continuous_estimates <-
             group2 = unique_groups[group2]
           )
           filtered_group_pval <- filtered_group %>%
-            filter(Group2 == unique_groups[group2]) %>%
-            mutate(p = replace(p, p == 0, 0.0001))
+            dplyr::filter(Group2 == unique_groups[group2]) %>%
+            dplyr::mutate(p = replace(p, p == 0, 0.0001))
 
           p_val_plot <-
             ggplot2::ggplot(filtered_group_pval,
@@ -281,17 +284,15 @@ build_plot_continuous_estimates <-
           if (!one_tailed_test) {
             if (type == "bayesian") {
               p_val_plot <- p_val_plot +
-                ggplot2::scale_fill_continuous(
-                  type = color_palette,
-                  "",
-                  limits = c(0, 1)
-                )
+                ggplot2::scale_fill_continuous(type = color_palette, "", limits = c(0, 1))
             } else {
               p_val_plot <- p_val_plot +
-                ggplot2::scale_fill_continuous(type = color_palette,
-                                               trans = "reverse",
-                                               "",
-                                               limits = c(1, 0))
+                ggplot2::scale_fill_continuous(
+                  type = color_palette,
+                  trans = "reverse",
+                  "",
+                  limits = c(1, 0)
+                )
             }
           } else {
             if (type == "bayesian") {
@@ -312,17 +313,21 @@ build_plot_continuous_estimates <-
             if (!one_tailed_test) {
               p_val_plot <- p_val_plot +
                 ggplot2::geom_hline(
-                  yintercept = ifelse(type == "bayesian",
-                                      1 - p_val_threshold,
-                                      p_val_threshold),
+                  yintercept = ifelse(
+                    type == "bayesian",
+                    1 - p_val_threshold,
+                    p_val_threshold
+                  ),
                   size = .5,
                   linetype = "dotted"
                 )
             } else {
               p_val_plot <- p_val_plot +
-                ggplot2::geom_hline(yintercept = p_val_threshold,
-                                    size = .5,
-                                    linetype = "dotted") +
+                ggplot2::geom_hline(
+                  yintercept = p_val_threshold,
+                  size = .5,
+                  linetype = "dotted"
+                ) +
                 ggplot2::geom_hline(
                   yintercept = 1 - p_val_threshold,
                   size = .5,
@@ -339,7 +344,7 @@ build_plot_continuous_estimates <-
               panel.grid = ggplot2::element_blank(),
               panel.background = ggplot2::element_blank(),
               panel.border = ggplot2::element_blank(),
-              plot.background = ggplot2::element_rect(fill = "transparent", colour = NA),
+              plot.background = ggplot2::element_rect(fill = "transparent", color = NA),
               axis.ticks.length = grid::unit(0, "pt"),
               plot.margin = grid::unit(c(0, 0, 0, 0), "cm"),
               panel.spacing = grid::unit(c(0, 0, 0, 0), "cm"),
@@ -365,7 +370,7 @@ build_plot_continuous_estimates <-
                 ymax = y + max_y_range
               ),
               alpha = 0.01,
-              colour = "black"
+              color = "black"
             )
         }
       }
@@ -407,8 +412,10 @@ build_plot_continuous_estimates <-
 
     plot_ci <- plot_ci +
       ggplot2::guides(fill = ggplot2::guide_colorbar(title = p_val_type)) +
-      ggplot2::theme(legend.title=ggplot2::element_text(size=7, face = "bold"),
-                     legend.text=ggplot2::element_text(size=7))
+      ggplot2::theme(
+        legend.title = ggplot2::element_text(size = 7, face = "bold"),
+        legend.text = ggplot2::element_text(size = 7)
+      )
 
     return(plot_ci)
   }

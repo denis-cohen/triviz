@@ -31,6 +31,8 @@ group-specific conditional expectations will be computed}
 for the calculation of the continuous estimates}
 
 \item{alpha}{Confidence level}
+
+\item{twotailed}{Two-tailed (the default) or one-tailed hypothesis test}
 }
 \value{
 Returns group-specific continuous estimates and all pairwise

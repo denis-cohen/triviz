@@ -27,7 +27,15 @@
 #' @return Returns, as a named list, group-specific continuous estimates and all
 #' pairwise differences with numerical uncertainty intervals as well as the underlying
 #' draws of these quantities of interest.
-
+#'
+#' @importFrom magrittr %>%
+#' @importFrom stats median
+#' @importFrom stats model.matrix
+#' @importFrom stats pnorm
+#' @importFrom stats qnorm
+#' @importFrom stats quantile
+#' @importFrom stats sd
+#'
 #' @export
 
 get_est_numerical_continuous <- function(model = NULL,

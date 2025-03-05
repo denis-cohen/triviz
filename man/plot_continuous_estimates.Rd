@@ -14,7 +14,8 @@ plot_continuous_estimates(
   one_tailed_test = FALSE,
   p_val_threshold = 0.05,
   p_val_type = "p-value",
-  interactive = FALSE
+  interactive = FALSE,
+  show_lower_triangular_title = FALSE
 )
 }
 \arguments{
@@ -45,6 +46,9 @@ Defaults to \code{"viridis"}.}
 
 \item{interactive}{A logical flag indicating whether the plotting function should
 produce an interactive ShinyApp or a static ggplot2 object (the default)}
+
+\item{show_lower_triangular_title}{Optional: Show lower triangular column titles
+instead of arrows.}
 }
 \description{
 Plots the lower triangular visualization

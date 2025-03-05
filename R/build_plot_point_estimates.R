@@ -2,6 +2,14 @@
 #'
 #' @description Internal function
 #'
+#' @importFrom magrittr %>%
+#' @importFrom stats median
+#' @importFrom stats model.matrix
+#' @importFrom stats pnorm
+#' @importFrom stats qnorm
+#' @importFrom stats quantile
+#' @importFrom stats sd
+#'
 #' @noRd
 
 build_plot_point_estimates <-
@@ -48,7 +56,7 @@ build_plot_point_estimates <-
         panel.grid.minor.y = ggplot2::element_blank(),
         panel.border = ggplot2::element_blank(),
         panel.grid.major.x = ggplot2::element_line(
-          colour = "grey75",
+          color = "grey75",
           linetype = 3,
           size = 0.5
         ),
@@ -96,10 +104,10 @@ build_plot_point_estimates <-
           xmin = x_min,
           xmax = x_max,
           ymin = groups - 1,
-          ymax = groups - .0001,
-          colour = I("black")
+          ymax = groups - .0001
         ),
-        fill = NA
+        fill = NA,
+        color = "black"
       )
 
     if (!is.null(add_vline)) {
@@ -275,7 +283,7 @@ build_plot_point_estimates <-
               y - 1
           ),
           pattern = "stripe",
-          pattern_colour = "gray35",
+          pattern_color = "gray35",
           pattern_fill = "white",
           pattern_angle = 45,
           pattern_density = .3 * (1 + rows) ^ (-1.75),

@@ -11,6 +11,14 @@
 #' @return Returns, as a named list, group-specific point estimates and all
 #' pairwise differences with analytical confidence intervals.
 #'
+#' @importFrom magrittr %>%
+#' @importFrom stats median
+#' @importFrom stats model.matrix
+#' @importFrom stats pnorm
+#' @importFrom stats qnorm
+#' @importFrom stats quantile
+#' @importFrom stats sd
+#'
 #' @export
 
 get_est_analytical <- function(model,
@@ -40,7 +48,7 @@ get_est_analytical <- function(model,
   ev <- ev %>%
     dplyr::slice(ordered_levels) %>%
     dplyr::rename(EV = Prediction) %>%
-    dplyr::rename_at(.vars = vars(starts_with("at(")),
+    dplyr::rename_at(.vars = dplyr::vars(dplyr::starts_with("at(")),
                      ~ "Group") %>%
     dplyr::select(-z)
 
