@@ -89,10 +89,10 @@ build_plot_point_estimates_interactive <-
           xmin = x_min,
           xmax = x_max,
           ymin = groups - 1,
-          ymax = groups - .0001,
-          color = "black"
+          ymax = groups - .0001
         ),
-        fill = NA
+        fill = NA,
+        color = "black"
       )
 
     if (!is.null(add_vline)) {
@@ -367,10 +367,10 @@ build_plot_point_estimates_interactive <-
           ymax = length(contrasts[1, 1,]) -
             y - 1,
           data_id = data_id,
-          color = "black",
           tooltip = tooltip
         ),
-        alpha = 0.01
+        alpha = 0.01,
+        color = "black"
       )
 
     # Add legend with custom color
